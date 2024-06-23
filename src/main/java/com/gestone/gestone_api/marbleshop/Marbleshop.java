@@ -1,5 +1,6 @@
 package com.gestone.gestone_api.marbleshop;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -20,17 +21,15 @@ public class Marbleshop {
     private String email;
     private String phone;
     @OneToMany(mappedBy = "marbleshop")
-    private List<User> users;
-    
+    private List<User> users = new ArrayList<>();
+
     public Marbleshop() {
     }
 
-    public Marbleshop(UUID id, String name, String email, String phone, List<User> users) {
-        this.id = id;
+    public Marbleshop(String name, String email, String phone) {
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.users = users;
     }
 
     public UUID getId() {
@@ -73,7 +72,4 @@ public class Marbleshop {
         this.users = users;
     }
 
-    
-
-    
 }

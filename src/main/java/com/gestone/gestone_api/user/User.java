@@ -1,6 +1,9 @@
 package com.gestone.gestone_api.user;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 import com.gestone.gestone_api.marbleshop.Marbleshop;
 
@@ -10,8 +13,10 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "marbleshop_user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -20,22 +25,24 @@ public class User {
     private String email;
     private String password;
     private String phone;
-    private UserType type;
+    private UserType userType;
     @ManyToOne(fetch = FetchType.LAZY)
     private Marbleshop marbleshop;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     public User() {
     }
 
     
-    public User(UUID id, String name, String email, String password, String phone, UserType type,
+    public User(UUID id, String name, String email, String password, String phone, UserType userType,
             Marbleshop marbleshop) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.phone = phone;
-        this.type = type;
+        this.userType = userType;
         this.marbleshop = marbleshop;
     }
 
@@ -80,11 +87,11 @@ public class User {
     }
 
     public UserType getType() {
-        return type;
+        return userType;
     }
 
-    public void setType(UserType type) {
-        this.type = type;
+    public void setType(UserType userType) {
+        this.userType = userType;
     }
 
     public Marbleshop getMarbleshop() {
