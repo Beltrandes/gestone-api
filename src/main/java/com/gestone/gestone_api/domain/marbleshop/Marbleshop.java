@@ -1,10 +1,11 @@
-package com.gestone.gestone_api.marbleshop;
+package com.gestone.gestone_api.domain.marbleshop;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import com.gestone.gestone_api.user.User;
+import com.gestone.gestone_api.domain.employee.Employee;
+import com.gestone.gestone_api.domain.user.User;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -22,6 +23,8 @@ public class Marbleshop {
     private String phone;
     @OneToMany(mappedBy = "marbleshop")
     private List<User> users = new ArrayList<>();
+    @OneToMany(mappedBy = "marbleshop")
+    private List<Employee> employees = new ArrayList<>();
 
     public Marbleshop() {
     }
@@ -71,5 +74,15 @@ public class Marbleshop {
     public void setUsers(List<User> users) {
         this.users = users;
     }
+
+    public List<Employee> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
+    
 
 }

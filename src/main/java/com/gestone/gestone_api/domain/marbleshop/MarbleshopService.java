@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.marbleshop;
+package com.gestone.gestone_api.domain.marbleshop;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

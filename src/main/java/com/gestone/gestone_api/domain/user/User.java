@@ -1,11 +1,16 @@
-package com.gestone.gestone_api.user;
+package com.gestone.gestone_api.domain.user;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.UUID;
+import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
-import com.gestone.gestone_api.marbleshop.Marbleshop;
+import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,7 +22,7 @@ import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "marbleshop_user")
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -100,6 +105,20 @@ public class User {
 
     public void setMarbleshop(Marbleshop marbleshop) {
         this.marbleshop = marbleshop;
+    }
+
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        if (userType == UserType.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_EMPLOYEE"));
+        if (userType == UserType.EMPLOYEE) return List.of(new SimpleGrantedAuthority("ROLE_EMPLOYEE"));
+        else return List.of(new SimpleGrantedAuthority("ROLE_CUSTOMER"));
+    }
+
+
+    @Override
+    public String getUsername() {
+       return email;
     }
 
 }

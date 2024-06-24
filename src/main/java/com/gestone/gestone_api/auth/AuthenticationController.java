@@ -1,0 +1,92 @@
+package com.gestone.gestone_api.auth;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.gestone.gestone_api.domain.user.AuthenticationDTO;
+import com.gestone.gestone_api.domain.user.User;
+import com.gestone.gestone_api.domain.employee.EmployeeRegisterDTO;
+import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
+import com.gestone.gestone_api.domain.marbleshop.MarbleshopService;
+import com.gestone.gestone_api.domain.user.AdminRegisterDTO;
+import com.gestone.gestone_api.domain.user.UserRepository;
+import com.gestone.gestone_api.domain.user.UserType;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("api/auth")
+public class AuthenticationController {
+    @Autowired
+    private AuthenticationManager authenticationManager;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private MarbleshopService marbleshopService;
+    @Autowired
+    private ApprovedAdminRepository approvedAdminRepository;
+
+    @PostMapping("/login")
+    public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
+        var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
+        var auth = authenticationManager.authenticate(usernamePassword);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/register/admin")
+    public ResponseEntity registerAdmin(@RequestBody @Valid AdminRegisterDTO data) {
+        if (approvedAdminRepository.findByEmail(data.email()).isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+
+        if (userRepository.findByEmail(data.email()) != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+
+        var adminUser = new User();
+        adminUser.setName(data.name());
+        adminUser.setEmail(data.email());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        adminUser.setPassword(encryptedPassword);
+        adminUser.setPhone(data.phone());
+        adminUser.setType(UserType.ADMIN);
+
+        var marbleshop = new Marbleshop(data.marbleshop().name(), data.marbleshop().email(), data.marbleshop().phone());
+        marbleshop.getUsers().add(adminUser);
+        var savedMarbleshop = marbleshopService.saveMarbleshop(marbleshop);
+        adminUser.setMarbleshop(savedMarbleshop);
+
+        userRepository.save(adminUser);
+
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("register/employee")
+    public ResponseEntity registerEmployee(EmployeeRegisterDTO data) {
+        if (userRepository.findByEmail(data.email()) != null)
+            return ResponseEntity.badRequest().build();
+        var employeeUser = new User();
+        employeeUser.setName(data.name());
+        employeeUser.setEmail(data.email());
+        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        employeeUser.setPassword(encryptedPassword);
+        employeeUser.setPhone(data.phone());
+        employeeUser.setType(UserType.EMPLOYEE);
+        var marbleshop = new Marbleshop(data.marbleshop().name(), data.marbleshop().email(),
+                data.marbleshop().phone());
+        marbleshop.getUsers().add(employeeUser);
+        var savedMarbleshop = marbleshopService.saveMarbleshop(marbleshop);
+        employeeUser.setMarbleshop(savedMarbleshop);
+        userRepository.save(employeeUser);
+
+        return ResponseEntity.ok().build();
+    }
+}

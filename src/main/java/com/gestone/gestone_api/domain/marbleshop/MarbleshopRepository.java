@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.marbleshop;
+package com.gestone.gestone_api.domain.marbleshop;
 
 import java.util.UUID;
 

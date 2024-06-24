@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.marbleshop;
+package com.gestone.gestone_api.domain.marbleshop;
 
 public record MarbleshopRequestDTO(
     String name,

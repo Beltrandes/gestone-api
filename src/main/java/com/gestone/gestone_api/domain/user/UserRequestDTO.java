@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.user;
+package com.gestone.gestone_api.domain.user;
 
 public record UserRequestDTO(
     String name,
