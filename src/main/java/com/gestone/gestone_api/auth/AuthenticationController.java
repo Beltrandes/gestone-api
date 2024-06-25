@@ -1,5 +1,7 @@
 package com.gestone.gestone_api.auth;
 
+import com.gestone.gestone_api.domain.user.*;
+import com.gestone.gestone_api.infra.security.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,14 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.gestone.gestone_api.domain.user.AuthenticationDTO;
-import com.gestone.gestone_api.domain.user.User;
 import com.gestone.gestone_api.domain.employee.EmployeeRegisterDTO;
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.domain.marbleshop.MarbleshopService;
-import com.gestone.gestone_api.domain.user.AdminRegisterDTO;
-import com.gestone.gestone_api.domain.user.UserRepository;
-import com.gestone.gestone_api.domain.user.UserType;
 
 import jakarta.validation.Valid;
 
@@ -33,12 +30,15 @@ public class AuthenticationController {
     private MarbleshopService marbleshopService;
     @Autowired
     private ApprovedAdminRepository approvedAdminRepository;
+    @Autowired
+    private TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid AuthenticationDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User) auth.getPrincipal());
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @PostMapping("/register/admin")
