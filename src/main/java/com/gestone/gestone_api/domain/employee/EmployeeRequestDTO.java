@@ -1,11 +1,12 @@
 package com.gestone.gestone_api.domain.employee;
 
-public record EmployeeRegisterDTO(
+import java.math.BigDecimal;
+
+public record EmployeeRequestDTO(
         String name,
-        String email,
-        String password,
+        String documentNumber,
+        BigDecimal salary,
         String phone,
         EmployeeRole employeeRole
-        ) {
-
+) {
 }

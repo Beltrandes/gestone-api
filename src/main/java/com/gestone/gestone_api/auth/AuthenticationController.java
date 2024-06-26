@@ -31,6 +31,8 @@ public class AuthenticationController {
     @Autowired
     private ApprovedAdminRepository approvedAdminRepository;
     @Autowired
+    private ApprovedEmployeeRepository approvedEmployeeRepository;
+    @Autowired
     private TokenService tokenService;
 
     @PostMapping("/login")
@@ -71,8 +73,13 @@ public class AuthenticationController {
 
     @PostMapping("register/employee")
     public ResponseEntity registerEmployee(EmployeeRegisterDTO data) {
-        if (userRepository.findByEmail(data.email()) != null)
-            return ResponseEntity.badRequest().build();
+        var approvedEmployeeResult = approvedEmployeeRepository.findByEmail(data.email());
+        if (approvedEmployeeResult.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        }
+        if (userRepository.findByEmail(data.email()) != null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         var employeeUser = new User();
         employeeUser.setName(data.name());
         employeeUser.setEmail(data.email());
@@ -80,13 +87,13 @@ public class AuthenticationController {
         employeeUser.setPassword(encryptedPassword);
         employeeUser.setPhone(data.phone());
         employeeUser.setType(UserType.EMPLOYEE);
-        var marbleshop = new Marbleshop(data.marbleshop().name(), data.marbleshop().email(),
-                data.marbleshop().phone());
-        marbleshop.getUsers().add(employeeUser);
-        var savedMarbleshop = marbleshopService.saveMarbleshop(marbleshop);
-        employeeUser.setMarbleshop(savedMarbleshop);
+
+        var approvedEmployee = approvedEmployeeResult.get();
+        employeeUser.setMarbleshop(approvedEmployee.getEmployee().getMarbleshop());
+
         userRepository.save(employeeUser);
 
         return ResponseEntity.ok().build();
+
     }
 }

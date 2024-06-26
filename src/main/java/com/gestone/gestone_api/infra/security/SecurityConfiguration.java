@@ -26,10 +26,11 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/register/admin").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/register/employee").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/customer").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register/employee").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/user/admin").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/employee").hasRole("ADMIN")
                         .anyRequest().authenticated())
-                        .csrf(csrf -> csrf.disable())
+                .csrf(csrf -> csrf.disable())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
