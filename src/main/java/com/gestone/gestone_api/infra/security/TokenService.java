@@ -4,13 +4,18 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.gestone.gestone_api.domain.user.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Array;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TokenService {
@@ -20,8 +25,11 @@ public class TokenService {
     public String generateToken(User user) {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
+            var authorities = user.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
             String token = JWT.create()
                     .withIssuer("gestone-api")
+                    .withClaim("authorities", authorities)
                     .withSubject(user.getEmail())
                     .withExpiresAt(generateExpirationDate())
                     .sign(algorithm);
@@ -29,6 +37,11 @@ public class TokenService {
         } catch (JWTCreationException e) {
             throw new RuntimeException("Error generating token", e);
         }
+    }
+
+    public String getUserEmailFromToken(String token) {
+        var decodedJWT = JWT.decode(token);
+        return decodedJWT.getSubject();
     }
 
     public String validateToken(String token) {
