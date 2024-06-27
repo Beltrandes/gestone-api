@@ -19,6 +19,8 @@ import com.gestone.gestone_api.domain.marbleshop.MarbleshopService;
 
 import jakarta.validation.Valid;
 
+import java.time.LocalDateTime;
+
 @RestController
 @RequestMapping("api/auth")
 public class AuthenticationController {
@@ -72,7 +74,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("register/employee")
-    public ResponseEntity registerEmployee(EmployeeRegisterDTO data) {
+    public ResponseEntity registerEmployee(@RequestBody EmployeeRegisterDTO data) {
         var approvedEmployeeResult = approvedEmployeeRepository.findByEmail(data.email());
         if (approvedEmployeeResult.isEmpty()) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -92,6 +94,9 @@ public class AuthenticationController {
         employeeUser.setMarbleshop(approvedEmployee.getEmployee().getMarbleshop());
 
         userRepository.save(employeeUser);
+        approvedEmployee.setRegistrationDate(LocalDateTime.now());
+        approvedEmployee.setRegistered(true);
+        approvedEmployeeRepository.save(approvedEmployee);
 
         return ResponseEntity.ok().build();
 

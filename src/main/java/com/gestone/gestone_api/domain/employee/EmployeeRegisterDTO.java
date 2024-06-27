@@ -4,8 +4,7 @@ public record EmployeeRegisterDTO(
         String name,
         String email,
         String password,
-        String phone,
-        EmployeeRole employeeRole
+        String phone
         ) {
 
 }

@@ -18,7 +18,7 @@ public class ApprovedEmployee {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    private Boolean registered;
+    private Boolean registered = false;
 
     private LocalDateTime registrationDate;
 

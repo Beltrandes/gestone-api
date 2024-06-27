@@ -16,7 +16,7 @@ public class EmployeeService {
     private UserRepository userRepository;
 
     public void saveEmployee(EmployeeRequestDTO employeeRequestDTO, HttpServletRequest request) {
-        String token = request.getHeader("Authentication");
+        String token = request.getHeader("Authorization");
         if (token != null) {
             var bearerlessToken = token.substring(7);
             String userEmail = tokenService.getUserEmailFromToken(bearerlessToken);

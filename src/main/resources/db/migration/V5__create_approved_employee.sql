@@ -1,6 +1,7 @@
 CREATE TABLE approved_employee (
   id SERIAL,
    employee_id UUID,
+   email VARCHAR(100),
    created_at TIMESTAMP WITHOUT TIME ZONE,
    registered BOOLEAN,
    registration_date TIMESTAMP WITHOUT TIME ZONE,
