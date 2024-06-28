@@ -1,17 +1,16 @@
 package com.gestone.gestone_api.domain.marbleshop;
 
+import com.gestone.gestone_api.domain.customer.Customer;
+import com.gestone.gestone_api.domain.employee.Employee;
+import com.gestone.gestone_api.domain.material.Material;
+import com.gestone.gestone_api.domain.user.User;
+import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import com.gestone.gestone_api.domain.employee.Employee;
-import com.gestone.gestone_api.domain.user.User;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 
 @Entity
 public class Marbleshop {
@@ -25,6 +24,12 @@ public class Marbleshop {
     private List<User> users = new ArrayList<>();
     @OneToMany(mappedBy = "marbleshop")
     private List<Employee> employees = new ArrayList<>();
+    @OneToMany(mappedBy = "marbleshop")
+    private List<Customer> customers = new ArrayList<>();
+    @OneToMany(mappedBy = "marbleshop")
+    private List<Material> materials = new ArrayList<>();
+    @CreationTimestamp
+    private LocalDateTime createdAt;
 
     public Marbleshop() {
     }
@@ -71,18 +76,16 @@ public class Marbleshop {
         return users;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
-    }
 
     public List<Employee> getEmployees() {
         return employees;
     }
-
-    public void setEmployees(List<Employee> employees) {
-        this.employees = employees;
+    public List<Material> getMaterials() {
+        return materials;
     }
 
-    
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
 }

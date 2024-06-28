@@ -16,8 +16,8 @@ public class EmployeeController {
     EmployeeService employeeService;
 
     @PostMapping
-    public ResponseEntity saveEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO , HttpServletRequest request) {
-        employeeService.saveEmployee(employeeRequestDTO, request);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<EmployeeResponseDTO> saveEmployee(@RequestBody EmployeeRequestDTO employeeRequestDTO, HttpServletRequest request) {
+        var employee = employeeService.saveEmployee(employeeRequestDTO, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(EmployeeResponseDTO.fromEmployee(employee));
     }
 }

@@ -1,5 +1,6 @@
 package com.gestone.gestone_api.domain.user;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +16,8 @@ public class UserAdminController {
     private UserAdminService userAdminService;
 
     @PostMapping("/approve")
-    public ResponseEntity approveEmployeeToRegister(@RequestBody ApprovedEmployeeDTO approvedEmployeeDTO) {
-        userAdminService.approveEmployee(approvedEmployeeDTO);
+    public ResponseEntity approveEmployeeToRegister(@RequestBody ApprovedEmployeeDTO approvedEmployeeDTO, HttpServletRequest request) {
+        userAdminService.approveEmployee(approvedEmployeeDTO, request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
