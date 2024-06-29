@@ -29,6 +29,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/auth/register/employee").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/user/admin").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/employee").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/material").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .csrf(csrf -> csrf.disable())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

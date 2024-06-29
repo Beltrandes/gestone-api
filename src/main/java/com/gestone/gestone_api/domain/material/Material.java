@@ -2,6 +2,7 @@ package com.gestone.gestone_api.domain.material;
 
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ public class Material {
     private BigDecimal price;
     private BigDecimal lastPrice;
     private MaterialType materialType;
+    @CreationTimestamp
     private LocalDateTime createdAt;
     @ManyToOne
     private Marbleshop marbleshop;
@@ -83,5 +85,9 @@ public class Material {
 
     public Marbleshop getMarbleshop() {
         return marbleshop;
+    }
+
+    public void setMarbleshop(Marbleshop marbleshop) {
+        this.marbleshop = marbleshop;
     }
 }
