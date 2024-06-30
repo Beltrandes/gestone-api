@@ -14,17 +14,29 @@ public class QuoteItem {
     private UUID id;
     private String name;
     private String details;
-    private BigDecimal measureX;
-    private  BigDecimal measureY;
+    private BigDecimal measureX = BigDecimal.ZERO;
+    private  BigDecimal measureY = BigDecimal.ZERO;
     private Integer quantity;
     @OneToOne
     private Material material;
-    private BigDecimal value;
-    private BigDecimal area;
-    private BigDecimal totalValue;
-    private BigDecimal totalArea;
+    private BigDecimal value = BigDecimal.ZERO;
+    private BigDecimal area = BigDecimal.ZERO;
+    private BigDecimal totalValue = BigDecimal.ZERO;
+    private BigDecimal totalArea =  BigDecimal.ZERO;
     @ManyToOne
     private Quotation quotation;
+
+    public QuoteItem() {
+    }
+
+    public QuoteItem(String name, String details, BigDecimal measureX, BigDecimal measureY, Integer quantity, Material material) {
+        this.name = name;
+        this.details = details;
+        this.measureX = measureX;
+        this.measureY = measureY;
+        this.quantity = quantity;
+        this.material = material;
+    }
 
     public void calculate() {
         if (material.getMaterialType() != MaterialType.OTHER) {

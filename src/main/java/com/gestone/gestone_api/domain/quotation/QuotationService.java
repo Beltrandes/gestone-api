@@ -36,8 +36,6 @@ public class QuotationService implements IQuotationService {
         quotation.setAddress(quotationDTO.address());
         quotation.setDeadlineDays(quotationDTO.deadlineDays());
         quotation.setDaysForDue(quotationDTO.daysForDue());
-
-        quotation.setQuotationStatus(QuotationStatus.PENDING);
         quotation.setCustomer(customer);
         quotation.setMarbleshop(marbleshop);
         List<QuoteItem> quoteItems = quotationDTO.quoteItems().stream().map(quoteItemDTO -> {
@@ -58,4 +56,6 @@ public class QuotationService implements IQuotationService {
         return quotationRepository.save(quotation);
 
     }
+
+
 }

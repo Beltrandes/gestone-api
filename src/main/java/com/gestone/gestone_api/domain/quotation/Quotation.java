@@ -23,7 +23,7 @@ public class Quotation {
     private Integer daysForDue;
     private BigDecimal totalValue = BigDecimal.ZERO;
     private BigDecimal totalArea = BigDecimal.ZERO;
-    private QuotationStatus quotationStatus;
+    private QuotationStatus quotationStatus = QuotationStatus.PENDING;
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
     @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL)
@@ -46,9 +46,12 @@ public class Quotation {
     }
 
     public void checkDueDate() {
-        if (LocalDateTime.now().isAfter(createdAt.plusDays(daysForDue))) {
-            this.quotationStatus = QuotationStatus.EXPIRED;
+        if (QuotationStatus.PENDING.equals(quotationStatus)) {
+            if (LocalDateTime.now().isAfter(createdAt.plusDays(daysForDue))) {
+                this.quotationStatus = QuotationStatus.EXPIRED;
+            }
         }
+
     }
 
     public void calculate() {
@@ -136,6 +139,10 @@ public class Quotation {
         return createdAt;
     }
 
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
     public Marbleshop getMarbleshop() {
         return marbleshop;
     }
@@ -143,4 +150,6 @@ public class Quotation {
     public void setMarbleshop(Marbleshop marbleshop) {
         this.marbleshop = marbleshop;
     }
+
+
 }
