@@ -1,43 +1,36 @@
 package com.gestone.gestone_api.domain.quotation;
 
-import com.gestone.gestone_api.domain.material.Material;
-import com.gestone.gestone_api.domain.material.MaterialType;
-import jakarta.persistence.*;
+import com.gestone.gestone_api.domain.material.MaterialResponseDTO;
 
 import java.math.BigDecimal;
 import java.util.UUID;
 
-@Entity
-public class QuoteItem {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+public class QuoteItemResponseDTO {
+
     private UUID id;
     private String name;
     private String details;
     private BigDecimal measureX;
     private  BigDecimal measureY;
     private Integer quantity;
-    @OneToOne
-    private Material material;
+    private MaterialResponseDTO material;
     private BigDecimal value;
     private BigDecimal area;
     private BigDecimal totalValue;
     private BigDecimal totalArea;
-    @ManyToOne
-    private Quotation quotation;
 
-    public void calculate() {
-        if (material.getMaterialType() != MaterialType.OTHER) {
-            area = measureX.multiply(measureY);
-            totalArea = area.multiply(new BigDecimal(quantity));
-            value = area.multiply(material.getPrice());
-            totalValue = value.multiply(new BigDecimal(quantity));
-
-        }
-        if (material.getMaterialType() == MaterialType.OTHER) {
-            value = material.getPrice();
-            totalValue = material.getPrice().multiply(new BigDecimal(quantity));
-        }
+    public QuoteItemResponseDTO(QuoteItem quoteItem) {
+        this.id = quoteItem.getId();
+        this.name = quoteItem.getName();
+        this.details = quoteItem.getDetails();
+        this.measureX = quoteItem.getMeasureX();
+        this.measureY = quoteItem.getMeasureY();
+        this.quantity = quoteItem.getQuantity();
+        this.material = new MaterialResponseDTO(quoteItem.getMaterial());
+        this.value = quoteItem.getValue();
+        this.area = quoteItem.getArea();
+        this.totalValue = quoteItem.getTotalValue();
+        this.totalArea = quoteItem.getTotalArea();
     }
 
     public UUID getId() {
@@ -84,11 +77,11 @@ public class QuoteItem {
         this.quantity = quantity;
     }
 
-    public Material getMaterial() {
+    public MaterialResponseDTO getMaterial() {
         return material;
     }
 
-    public void setMaterial(Material material) {
+    public void setMaterial(MaterialResponseDTO material) {
         this.material = material;
     }
 
@@ -122,13 +115,5 @@ public class QuoteItem {
 
     public void setTotalArea(BigDecimal totalArea) {
         this.totalArea = totalArea;
-    }
-
-    public Quotation getQuotation() {
-        return quotation;
-    }
-
-    public void setQuotation(Quotation quotation) {
-        this.quotation = quotation;
     }
 }

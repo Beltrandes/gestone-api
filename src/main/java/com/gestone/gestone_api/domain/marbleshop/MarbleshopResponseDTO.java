@@ -10,22 +10,12 @@ public class MarbleshopResponseDTO {
         String phone;
         LocalDateTime createdAt;
 
-    public MarbleshopResponseDTO(UUID id, String name, String email, String phone, LocalDateTime createdAt) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
-        this.createdAt = createdAt;
-    }
-
-    public static MarbleshopResponseDTO fromMarbleshop(Marbleshop marbleshop) {
-        return new MarbleshopResponseDTO(
-                marbleshop.getId(),
-                marbleshop.getName(),
-                marbleshop.getEmail(),
-                marbleshop.getPhone(),
-                marbleshop.getCreatedAt()
-        );
+    public MarbleshopResponseDTO(Marbleshop marbleshop) {
+        this.id = marbleshop.getId();
+        this.name = marbleshop.getName();
+        this.email = marbleshop.getEmail();
+        this.phone = marbleshop.getPhone();
+        this.createdAt = marbleshop.getCreatedAt();
     }
 
     public UUID getId() {

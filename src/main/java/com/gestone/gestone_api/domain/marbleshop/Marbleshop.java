@@ -3,6 +3,7 @@ package com.gestone.gestone_api.domain.marbleshop;
 import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.employee.Employee;
 import com.gestone.gestone_api.domain.material.Material;
+import com.gestone.gestone_api.domain.quotation.Quotation;
 import com.gestone.gestone_api.domain.user.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -28,6 +29,8 @@ public class Marbleshop {
     private List<Customer> customers = new ArrayList<>();
     @OneToMany(mappedBy = "marbleshop")
     private List<Material> materials = new ArrayList<>();
+    @OneToMany(mappedBy = "marbleshop")
+    private List<Quotation> quotations = new ArrayList<>();
     @CreationTimestamp
     private LocalDateTime createdAt;
 

@@ -1,6 +1,7 @@
 package com.gestone.gestone_api.domain.quotation;
 
 import com.gestone.gestone_api.domain.customer.Customer;
+import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -20,13 +21,15 @@ public class Quotation {
     private String address;
     private Integer deadlineDays;
     private Integer daysForDue;
-    private BigDecimal totalValue;
-    private BigDecimal totalArea;
+    private BigDecimal totalValue = BigDecimal.ZERO;
+    private BigDecimal totalArea = BigDecimal.ZERO;
     private QuotationStatus quotationStatus;
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
-    @OneToMany(mappedBy = "quotation")
+    @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL)
     private List<QuoteItem> quoteItems = new ArrayList<>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Marbleshop marbleshop;
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -46,6 +49,15 @@ public class Quotation {
         if (LocalDateTime.now().isAfter(createdAt.plusDays(daysForDue))) {
             this.quotationStatus = QuotationStatus.EXPIRED;
         }
+    }
+
+    public void calculate() {
+        this.totalValue = quoteItems.stream().map(QuoteItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+        this.totalArea = quoteItems.stream().map(QuoteItem::getTotalArea).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public UUID getId() {
+        return id;
     }
 
     public String getName() {
@@ -116,8 +128,19 @@ public class Quotation {
         return quoteItems;
     }
 
+    public void setQuoteItems(List<QuoteItem> quoteItems) {
+        this.quoteItems = quoteItems;
+    }
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
 
+    public Marbleshop getMarbleshop() {
+        return marbleshop;
+    }
+
+    public void setMarbleshop(Marbleshop marbleshop) {
+        this.marbleshop = marbleshop;
+    }
 }

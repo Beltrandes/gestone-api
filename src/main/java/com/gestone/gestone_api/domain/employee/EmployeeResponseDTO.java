@@ -36,7 +36,7 @@ public class EmployeeResponseDTO {
                 employee.getSalary(),
                 employee.getPhone(),
                 employee.getEmployeeRole().name(),
-                MarbleshopResponseDTO.fromMarbleshop(employee.getMarbleshop()),
+                new MarbleshopResponseDTO(employee.getMarbleshop()),
                 employee.getCreatedAt()
 
         );

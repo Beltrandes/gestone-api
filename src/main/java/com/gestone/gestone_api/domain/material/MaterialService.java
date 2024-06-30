@@ -6,8 +6,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
-public class MaterialService {
+public class MaterialService implements IMaterialService {
     @Autowired
     private MaterialRepository materialRepository;
     @Autowired
@@ -23,5 +25,13 @@ public class MaterialService {
         material.setMaterialType(materialDTO.materialType());
         material.setMarbleshop(marbleshop);
         return materialRepository.save(material);
+    }
+
+    @Override
+    public Material findById(UUID id) {
+        if (id == null) {
+            return null;
+        }
+        return materialRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Material not found with id: " + id));
     }
 }
