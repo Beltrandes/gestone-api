@@ -3,6 +3,7 @@ package com.gestone.gestone_api.domain.quotation;
 import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.customer.CustomerService;
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
+import com.gestone.gestone_api.domain.marbleshop.MarbleshopService;
 import com.gestone.gestone_api.domain.material.Material;
 import com.gestone.gestone_api.domain.material.MaterialService;
 import com.gestone.gestone_api.infra.security.TokenService;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class QuotationService implements IQuotationService {
@@ -24,6 +26,8 @@ public class QuotationService implements IQuotationService {
     private MaterialService materialService;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private MarbleshopService marbleshopService;
 
     @Override
     public Quotation save(QuotationDTO quotationDTO, HttpServletRequest request) {
@@ -55,6 +59,21 @@ public class QuotationService implements IQuotationService {
         quotation.calculate();
         return quotationRepository.save(quotation);
 
+    }
+
+    public Quotation validateDueDate(Quotation quotation) {
+        quotation.checkDueDate();
+        return quotationRepository.save(quotation);
+    }
+
+    public List<Quotation> findAll(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
+        List<Quotation> quotations = marbleshop.getQuotations();
+        quotations.forEach(this::validateDueDate);
+        marbleshop.setQuotations(quotations);
+        marbleshopService.saveMarbleshop(marbleshop);
+        return marbleshop.getQuotations();
     }
 
 

@@ -56,10 +56,7 @@ public class TokenService {
         var bearerlessToken = token.replace("Bearer ", "");
         var email = getUserEmailFromToken(bearerlessToken);
         var user = userRepository.findUserByEmail(email);
-        if (user.isEmpty()) {
-            return null;
-        }
-        return user.get().getMarbleshop();
+        return user.map(User::getMarbleshop).orElse(null);
     }
 
     public String validateToken(String token) {

@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -34,4 +36,19 @@ public class MaterialService implements IMaterialService {
         }
         return materialRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Material not found with id: " + id));
     }
+
+    @Override
+    public List<Material> findAll(HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
+        Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
+        return marbleshop.getMaterials();
+    }
+
+    public Material updatePrice(UpdateMaterialPriceDTO updateMaterialPriceDTO) {
+        Material material = findById(updateMaterialPriceDTO.materialId());
+        material.setLastPrice(material.getPrice());
+        material.setPrice(updateMaterialPriceDTO.price());
+        return materialRepository.save(material);
+    }
+
 }

@@ -16,7 +16,7 @@ public class Material {
     private String name;
     private String details;
     private BigDecimal price;
-    private BigDecimal lastPrice;
+    private BigDecimal lastPrice = BigDecimal.ZERO;
     private MaterialType materialType;
     @CreationTimestamp
     private LocalDateTime createdAt;
