@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-public class Material {
+public class MarbleshopMaterial {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -17,20 +17,20 @@ public class Material {
     private String details;
     private BigDecimal price;
     private BigDecimal lastPrice = BigDecimal.ZERO;
-    private MaterialType materialType;
+    private MarbleshopMaterialType marbleshopMaterialType;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @ManyToOne
     private Marbleshop marbleshop;
 
-    public Material() {
+    public MarbleshopMaterial() {
     }
 
-    public Material(String name, String details, BigDecimal price, MaterialType materialType, Marbleshop marbleshop) {
+    public MarbleshopMaterial(String name, String details, BigDecimal price, MarbleshopMaterialType marbleshopMaterialType, Marbleshop marbleshop) {
         this.name = name;
         this.details = details;
         this.price = price;
-        this.materialType = materialType;
+        this.marbleshopMaterialType = marbleshopMaterialType;
         this.marbleshop = marbleshop;
     }
 
@@ -71,12 +71,12 @@ public class Material {
         this.lastPrice = lastPrice;
     }
 
-    public MaterialType getMaterialType() {
-        return materialType;
+    public MarbleshopMaterialType getMaterialType() {
+        return marbleshopMaterialType;
     }
 
-    public void setMaterialType(MaterialType materialType) {
-        this.materialType = materialType;
+    public void setMaterialType(MarbleshopMaterialType marbleshopMaterialType) {
+        this.marbleshopMaterialType = marbleshopMaterialType;
     }
 
     public LocalDateTime getCreatedAt() {
