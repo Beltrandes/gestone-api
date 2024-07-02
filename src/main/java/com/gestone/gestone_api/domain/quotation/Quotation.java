@@ -27,7 +27,7 @@ public class Quotation {
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
     @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL)
-    private List<MarbleshopItem> quoteItems = new ArrayList<>();
+    private List<MarbleshopItem> marbleshopItems = new ArrayList<>();
     @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL)
     private List<MiscellaneousItem> miscellaneousItems = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
@@ -57,8 +57,8 @@ public class Quotation {
     }
 
     public void calculate() {
-        this.totalValue = quoteItems.stream().map(MarbleshopItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add);
-        this.totalArea = quoteItems.stream().map(MarbleshopItem::getTotalArea).reduce(BigDecimal.ZERO, BigDecimal::add);
+        this.totalValue = marbleshopItems.stream().map(MarbleshopItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+        this.totalArea = marbleshopItems.stream().map(MarbleshopItem::getTotalArea).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public UUID getId() {
@@ -129,12 +129,20 @@ public class Quotation {
         this.customer = customer;
     }
 
-    public List<MarbleshopItem> getQuoteItems() {
-        return quoteItems;
+    public List<MarbleshopItem> getMarbleshopItems() {
+        return marbleshopItems;
     }
 
-    public void setQuoteItems(List<MarbleshopItem> quoteItems) {
-        this.quoteItems = quoteItems;
+    public void setMarbleshopItems(List<MarbleshopItem> marbleshopItems) {
+        this.marbleshopItems = marbleshopItems;
+    }
+
+    public List<MiscellaneousItem> getMiscellaneousItems() {
+        return miscellaneousItems;
+    }
+
+    public void setMiscellaneousItems(List<MiscellaneousItem> miscellaneousItems) {
+        this.miscellaneousItems = miscellaneousItems;
     }
 
     public LocalDateTime getCreatedAt() {

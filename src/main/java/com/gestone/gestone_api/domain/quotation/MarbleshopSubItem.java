@@ -1,6 +1,6 @@
 package com.gestone.gestone_api.domain.quotation;
 
-import com.gestone.gestone_api.domain.material.Material;
+import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -16,7 +16,7 @@ public class MarbleshopSubItem {
     private BigDecimal value = BigDecimal.ZERO;
     private BigDecimal area = BigDecimal.ZERO;
     @OneToOne
-    private Material material;
+    private MarbleshopMaterial marbleshopMaterial;
     private MarbleshopSubItemType marbleshopSubItemType;
     @ManyToOne(fetch = FetchType.LAZY)
     private MarbleshopItem marbleshopItem;
@@ -35,7 +35,7 @@ public class MarbleshopSubItem {
 
     public void calculate() {
         this.area = this.measureX.multiply(this.measureY);
-        this.value = this.area.multiply(this.material.getPrice());
+        this.value = this.area.multiply(this.marbleshopMaterial.getPrice());
     }
 
     public UUID getId() {
@@ -89,4 +89,14 @@ public class MarbleshopSubItem {
     public void setArea(BigDecimal area) {
         this.area = area;
     }
+
+
+    public MarbleshopMaterial getMarbleshopMaterial() {
+        return marbleshopMaterial;
+    }
+
+    public void setMarbleshopMaterial(MarbleshopMaterial marbleshopMaterial) {
+        this.marbleshopMaterial = marbleshopMaterial;
+    }
+
 }

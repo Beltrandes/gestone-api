@@ -2,10 +2,10 @@ package com.gestone.gestone_api.domain.material;
 
 import java.math.BigDecimal;
 
-public record MaterialDTO(
+public record MarbleshopMaterialDTO(
     String name,
     String details,
     BigDecimal price,
-    MaterialType materialType
+    MarbleshopMaterialType marbleshopMaterialType
 ) {
 }

@@ -19,7 +19,8 @@ public class QuotationResponseDTO {
     BigDecimal totalArea;
     QuotationStatus quotationStatus;
     CustomerListResponseDTO customer;
-    List<QuoteItemResponseDTO> quoteItems;
+    List<MarbleshopItemResponseDTO> marbleshopItems;
+    List<MiscellaneousItemResponseDTO> miscellaneousItems;
     MarbleshopResponseDTO marbleshop;
     LocalDateTime createdAt;
 
@@ -34,7 +35,7 @@ public class QuotationResponseDTO {
         this.totalArea = quotation.getTotalArea();
         this.quotationStatus = quotation.getQuotationStatus();
         this.customer = new CustomerListResponseDTO(quotation.getCustomer());
-        this.quoteItems = quotation.getQuoteItems().stream().map(QuoteItemResponseDTO::new).toList();
+        this.marbleshopItems = quotation.getMarbleshopItems().stream().map(MarbleshopItemResponseDTO::new).toList();
         this.marbleshop = new MarbleshopResponseDTO(quotation.getMarbleshop());
         this.createdAt = quotation.getCreatedAt();
     }
@@ -115,12 +116,12 @@ public class QuotationResponseDTO {
         this.customer = customer;
     }
 
-    public List<QuoteItemResponseDTO> getQuoteItems() {
-        return quoteItems;
+    public List<MarbleshopItemResponseDTO> getQuoteItems() {
+        return marbleshopItems;
     }
 
-    public void setQuoteItems(List<QuoteItemResponseDTO> quoteItems) {
-        this.quoteItems = quoteItems;
+    public void setQuoteItems(List<MarbleshopItemResponseDTO> marbleshopItems) {
+        this.marbleshopItems = marbleshopItems;
     }
 
     public MarbleshopResponseDTO getMarbleshop() {

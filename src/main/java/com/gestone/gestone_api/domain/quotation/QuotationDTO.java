@@ -8,9 +8,9 @@ public record QuotationDTO(
         String details,
         String address,
         Integer deadlineDays,
-
         Integer daysForDue,
         UUID customerId,
-        List<QuoteItemDTO> quoteItems
+        List<MarbleshopItemDTO> marbleshopItems,
+        List<MiscellaneousItemDTO> miscellaneousItems
 ) {
 }

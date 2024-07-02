@@ -2,7 +2,8 @@ package com.gestone.gestone_api.domain.marbleshop;
 
 import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.employee.Employee;
-import com.gestone.gestone_api.domain.material.Material;
+import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
+import com.gestone.gestone_api.domain.material.MiscellaneousMaterial;
 import com.gestone.gestone_api.domain.quotation.Quotation;
 import com.gestone.gestone_api.domain.user.User;
 import jakarta.persistence.*;
@@ -28,7 +29,9 @@ public class Marbleshop {
     @OneToMany(mappedBy = "marbleshop")
     private List<Customer> customers = new ArrayList<>();
     @OneToMany(mappedBy = "marbleshop")
-    private List<Material> materials = new ArrayList<>();
+    private List<MarbleshopMaterial> marbleshopMaterials = new ArrayList<>();
+    @OneToMany(mappedBy = "marbleshop")
+    private List<MiscellaneousMaterial> miscellaneousMaterials = new ArrayList<>();
     @OneToMany(mappedBy = "marbleshop")
     private List<Quotation> quotations = new ArrayList<>();
     @CreationTimestamp
@@ -83,8 +86,8 @@ public class Marbleshop {
     public List<Employee> getEmployees() {
         return employees;
     }
-    public List<Material> getMaterials() {
-        return materials;
+    public List<MarbleshopMaterial> getMarbleshopMaterials() {
+        return marbleshopMaterials;
     }
 
 

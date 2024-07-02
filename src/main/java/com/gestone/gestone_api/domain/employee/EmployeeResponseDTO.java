@@ -1,6 +1,5 @@
 package com.gestone.gestone_api.domain.employee;
 
-import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.domain.marbleshop.MarbleshopResponseDTO;
 
 import java.math.BigDecimal;

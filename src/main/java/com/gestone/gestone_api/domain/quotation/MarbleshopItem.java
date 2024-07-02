@@ -1,6 +1,6 @@
 package com.gestone.gestone_api.domain.quotation;
 
-import com.gestone.gestone_api.domain.material.Material;
+import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
 import com.gestone.gestone_api.domain.order.ServiceOrder;
 import jakarta.persistence.*;
 
@@ -20,7 +20,7 @@ public class MarbleshopItem {
     private BigDecimal measureY = BigDecimal.ZERO;
     private Integer quantity;
     @OneToOne
-    private Material material;
+    private MarbleshopMaterial marbleshopMaterial;
     private BigDecimal unitValue = BigDecimal.ZERO;
     private BigDecimal unitArea = BigDecimal.ZERO;
     private BigDecimal totalValue = BigDecimal.ZERO;
@@ -37,16 +37,16 @@ public class MarbleshopItem {
     public MarbleshopItem() {
     }
 
-    public MarbleshopItem(BigDecimal measureX, BigDecimal measureY, Integer quantity, Material material) {
+    public MarbleshopItem(BigDecimal measureX, BigDecimal measureY, Integer quantity, MarbleshopMaterial marbleshopMaterial) {
         this.measureX = measureX;
         this.measureY = measureY;
         this.quantity = quantity;
-        this.material = material;
+        this.marbleshopMaterial = marbleshopMaterial;
     }
 
     public void calculate() {
         this.unitArea = this.measureX.multiply(this.measureY);
-        this.unitValue = this.unitArea.multiply(this.material.getPrice());
+        this.unitValue = this.unitArea.multiply(this.marbleshopMaterial.getPrice());
         marbleshopSubItems.forEach(marbleshopSubItem -> {
             marbleshopSubItem.calculate();
             this.unitValue = this.unitValue.add(marbleshopSubItem.getValue());
@@ -102,12 +102,12 @@ public class MarbleshopItem {
         this.quantity = quantity;
     }
 
-    public Material getMaterial() {
-        return material;
+    public MarbleshopMaterial getMarbleshopMaterial() {
+        return marbleshopMaterial;
     }
 
-    public void setMaterial(Material material) {
-        this.material = material;
+    public void setMarbleshopMaterial(MarbleshopMaterial marbleshopMaterial) {
+        this.marbleshopMaterial = marbleshopMaterial;
     }
 
     public BigDecimal getUnitValue() {

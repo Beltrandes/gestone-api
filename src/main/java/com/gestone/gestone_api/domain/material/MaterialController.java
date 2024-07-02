@@ -14,26 +14,26 @@ import java.util.List;
 @RequestMapping("api/v1/material")
 public class MaterialController {
     @Autowired
-    private MaterialService materialService;
+    private MarbleshopMaterialService marbleshopMaterialService;
     @Autowired
     private TokenService tokenService;
 
     @PostMapping
-    public ResponseEntity<MaterialResponseDTO> save(@RequestBody MaterialDTO materialDTO, HttpServletRequest request) {
-        var savedMaterial = materialService.save(materialDTO, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new MaterialResponseDTO(savedMaterial));
+    public ResponseEntity<MarbleshopMaterialResponseDTO> saveMarbleshopMaterial(@RequestBody MarbleshopMaterialDTO marbleshopMaterialDTO, HttpServletRequest request) {
+        var savedMarbleshopMaterial = marbleshopMaterialService.save(marbleshopMaterialDTO, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new MarbleshopMaterialResponseDTO(savedMarbleshopMaterial));
     }
 
     @GetMapping
-    public ResponseEntity<List<MaterialResponseDTO>> findAll(HttpServletRequest request) {
+    public ResponseEntity<List<MarbleshopMaterialResponseDTO>> findAllMarbleshopMaterial(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
-        List<Material> materials = marbleshop.getMaterials();
-        return ResponseEntity.ok(materials.stream().map(MaterialResponseDTO::new).toList());
+        List<MarbleshopMaterial> materials = marbleshop.getMarbleshopMaterials();
+        return ResponseEntity.ok(materials.stream().map(MarbleshopMaterialResponseDTO::new).toList());
     }
     @PatchMapping("/update/price")
-    public ResponseEntity<MaterialResponseDTO> updatePrice(@RequestBody UpdateMaterialPriceDTO updateMaterialPriceDTO) {
-        var updatedMaterial = materialService.updatePrice(updateMaterialPriceDTO);
-        return ResponseEntity.ok(new MaterialResponseDTO(updatedMaterial));
+    public ResponseEntity<MarbleshopMaterialResponseDTO> updatePrice(@RequestBody UpdateMaterialPriceDTO updateMaterialPriceDTO) {
+        var updatedMaterial = marbleshopMaterialService.updatePrice(updateMaterialPriceDTO);
+        return ResponseEntity.ok(new MarbleshopMaterialResponseDTO(updatedMaterial));
     }
 }

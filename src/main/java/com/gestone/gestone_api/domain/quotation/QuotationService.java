@@ -4,26 +4,25 @@ import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.customer.CustomerService;
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.domain.marbleshop.MarbleshopService;
-import com.gestone.gestone_api.domain.material.Material;
-import com.gestone.gestone_api.domain.material.MaterialService;
+import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
+import com.gestone.gestone_api.domain.material.MarbleshopMaterialService;
 import com.gestone.gestone_api.infra.security.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class QuotationService implements IQuotationService {
     @Autowired
     private QuotationRepository quotationRepository;
     @Autowired
-    private QuoteItemRepository quoteItemRepository;
+    private MarbleshopItemRepository marbleshopItemRepository;
     @Autowired
     private CustomerService customerService;
     @Autowired
-    private MaterialService materialService;
+    private MarbleshopMaterialService marbleshopMaterialService;
     @Autowired
     private TokenService tokenService;
     @Autowired
@@ -42,20 +41,20 @@ public class QuotationService implements IQuotationService {
         quotation.setDaysForDue(quotationDTO.daysForDue());
         quotation.setCustomer(customer);
         quotation.setMarbleshop(marbleshop);
-        List<QuoteItem> quoteItems = quotationDTO.quoteItems().stream().map(quoteItemDTO -> {
-            Material material = materialService.findById(quoteItemDTO.materialId());
-            QuoteItem quoteItem = new QuoteItem();
-            quoteItem.setName(quoteItemDTO.name());
-            quoteItem.setDetails(quoteItemDTO.details());
-            quoteItem.setMeasureX(quoteItemDTO.measureX());
-            quoteItem.setMeasureY(quoteItemDTO.measureY());
-            quoteItem.setQuantity(quoteItemDTO.quantity());
-            quoteItem.setQuotation(quotation);
-            quoteItem.setMaterial(material);
-            quoteItem.calculate();
-            return quoteItem;
+        List<MarbleshopItem> marbleshopItems = quotationDTO.marbleshopItems().stream().map(marbleshopItemDTO -> {
+            MarbleshopMaterial marbleshopMaterial = marbleshopMaterialService.findById(marbleshopItemDTO.marbleshopMaterialId());
+            MarbleshopItem marbleshopItem = new MarbleshopItem();
+            marbleshopItem.setName(marbleshopItemDTO.name());
+            marbleshopItem.setDescription(marbleshopItemDTO.description());
+            marbleshopItem.setMeasureX(marbleshopItemDTO.measureX());
+            marbleshopItem.setMeasureY(marbleshopItemDTO.measureY());
+            marbleshopItem.setQuantity(marbleshopItemDTO.quantity());
+            marbleshopItem.setQuotation(quotation);
+            marbleshopItem.setMarbleshopMaterial(marbleshopMaterial);
+            marbleshopItem.calculate();
+            return marbleshopItem;
         }).toList();
-        quotation.setQuoteItems(quoteItems);
+        quotation.setMarbleshopItems(marbleshopItems);
         quotation.calculate();
         return quotationRepository.save(quotation);
 
