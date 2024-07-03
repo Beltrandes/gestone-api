@@ -17,6 +17,7 @@ public class MarbleshopMaterial {
     private String details;
     private BigDecimal price;
     private BigDecimal lastPrice = BigDecimal.ZERO;
+    @Enumerated(EnumType.STRING)
     private MarbleshopMaterialType marbleshopMaterialType;
     @CreationTimestamp
     private LocalDateTime createdAt;

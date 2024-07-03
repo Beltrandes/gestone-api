@@ -2,6 +2,8 @@ package com.gestone.gestone_api.domain.quotation;
 
 import com.gestone.gestone_api.domain.customer.CustomerListResponseDTO;
 import com.gestone.gestone_api.domain.marbleshop.MarbleshopResponseDTO;
+import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItemResponseDTO;
+import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItemResponseDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;

@@ -4,8 +4,13 @@ import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.customer.CustomerService;
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.domain.marbleshop.MarbleshopService;
+import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
+import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItemRepository;
 import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
 import com.gestone.gestone_api.domain.material.MarbleshopMaterialService;
+import com.gestone.gestone_api.domain.material.MiscellaneousMaterial;
+import com.gestone.gestone_api.domain.material.MiscellaneousMaterialService;
+import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
 import com.gestone.gestone_api.infra.security.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +28,8 @@ public class QuotationService implements IQuotationService {
     private CustomerService customerService;
     @Autowired
     private MarbleshopMaterialService marbleshopMaterialService;
+    @Autowired
+    private MiscellaneousMaterialService miscellaneousMaterialService;
     @Autowired
     private TokenService tokenService;
     @Autowired
@@ -53,6 +60,15 @@ public class QuotationService implements IQuotationService {
             marbleshopItem.setMarbleshopMaterial(marbleshopMaterial);
             marbleshopItem.calculate();
             return marbleshopItem;
+        }).toList();
+        List<MiscellaneousItem> miscellaneousItems = quotationDTO.miscellaneousItems().stream().map(miscellaneousItemDTO -> {
+            MiscellaneousMaterial miscellaneousMaterial = miscellaneousMaterialService.findById(miscellaneousItemDTO.miscellaneousMaterialId());
+            MiscellaneousItem miscellaneousItem = new MiscellaneousItem();
+            miscellaneousItem.setName(miscellaneousItemDTO.name());
+            miscellaneousItem.setDetails(miscellaneousItemDTO.description());
+            miscellaneousItem.setQuantity(miscellaneousItemDTO.quantity());
+            miscellaneousItem.setQuotation(quotation);
+            return miscellaneousItem;
         }).toList();
         quotation.setMarbleshopItems(marbleshopItems);
         quotation.calculate();
