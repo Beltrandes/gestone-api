@@ -1,7 +1,5 @@
-package com.gestone.gestone_api.domain.miscellaneous_item;
+package com.gestone.gestone_api.domain.quotation;
 
-import com.gestone.gestone_api.domain.marbleshop_order.MarbleshopOrder;
-import com.gestone.gestone_api.domain.quotation.Quotation;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -16,28 +14,23 @@ public class MiscellaneousItem {
     private String name;
     private String details;
     private Integer quantity;
-    private BigDecimal unitValue = BigDecimal.ZERO;
+    private BigDecimal value = BigDecimal.ZERO;
     private BigDecimal totalValue = BigDecimal.ZERO;
     @OneToOne
     private MiscellaneousMaterial miscellaneousMaterial;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Quotation quotation;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private MarbleshopOrder marbleshopOrder;
+    @ManyToOne
+    private MarbleshopItem marbleshopItem;
 
     public MiscellaneousItem() {
     }
 
-    public MiscellaneousItem(String name, String details, Integer quantity, MiscellaneousMaterial miscellaneousMaterial) {
+    public MiscellaneousItem(String name, String details, Integer quantity, MiscellaneousMaterial miscellaneousMaterial,
+            MarbleshopItem marbleshopItem) {
         this.name = name;
         this.details = details;
         this.quantity = quantity;
         this.miscellaneousMaterial = miscellaneousMaterial;
-    }
-
-    public void calculate() {
-        unitValue = miscellaneousMaterial.getPrice();
-        totalValue = unitValue.multiply(BigDecimal.valueOf(quantity));
+        this.marbleshopItem = marbleshopItem;
     }
 
     public UUID getId() {
@@ -68,12 +61,12 @@ public class MiscellaneousItem {
         this.quantity = quantity;
     }
 
-    public BigDecimal getUnitValue() {
-        return unitValue;
+    public BigDecimal getValue() {
+        return value;
     }
 
-    public void setUnitValue(BigDecimal unitValue) {
-        this.unitValue = unitValue;
+    public void setValue(BigDecimal value) {
+        this.value = value;
     }
 
     public BigDecimal getTotalValue() {
@@ -92,19 +85,12 @@ public class MiscellaneousItem {
         this.miscellaneousMaterial = miscellaneousMaterial;
     }
 
-    public Quotation getQuotation() {
-        return quotation;
+    public MarbleshopItem getMarbleshopItem() {
+        return marbleshopItem;
     }
 
-    public void setQuotation(Quotation quotation) {
-        this.quotation = quotation;
+    public void setMarbleshopItem(MarbleshopItem marbleshopItem) {
+        this.marbleshopItem = marbleshopItem;
     }
 
-    public MarbleshopOrder getMarbleshopOrder() {
-        return marbleshopOrder;
-    }
-
-    public void setMarbleshopOrder(MarbleshopOrder marbleshopOrder) {
-        this.marbleshopOrder = marbleshopOrder;
-    }
 }

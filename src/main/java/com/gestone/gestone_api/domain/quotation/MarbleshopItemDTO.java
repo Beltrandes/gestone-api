@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.domain.marbleshop_item;
+package com.gestone.gestone_api.domain.quotation;
 
 import java.math.BigDecimal;
 import java.util.List;

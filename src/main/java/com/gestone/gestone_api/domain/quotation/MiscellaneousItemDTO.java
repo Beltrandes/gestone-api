@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.domain.miscellaneous_item;
+package com.gestone.gestone_api.domain.quotation;
 
 import java.util.UUID;
 

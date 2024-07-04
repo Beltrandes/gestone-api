@@ -1,2 +1,0 @@
-ALTER TABLE quotation ADD COLUMN marbleshop_id UUID NOT NULL;
-ALTER TABLE quotation ADD CONSTRAINT FK_MARBLESHOP_ON_QUOTATION FOREIGN KEY (marbleshop_id) REFERENCES marbleshop (id);

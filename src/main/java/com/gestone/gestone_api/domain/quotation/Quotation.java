@@ -2,8 +2,6 @@ package com.gestone.gestone_api.domain.quotation;
 
 import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
-import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
-import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -60,7 +58,6 @@ public class Quotation {
 
     public void calculate() {
         this.totalValue = marbleshopItems.stream().map(MarbleshopItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add);
-        this.totalValue = miscellaneousItems.stream().map(MiscellaneousItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add);
         this.totalArea = marbleshopItems.stream().map(MarbleshopItem::getTotalArea).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 

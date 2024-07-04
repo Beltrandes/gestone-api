@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.domain.marbleshop_item;
+package com.gestone.gestone_api.domain.quotation;
 
 import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
 import jakarta.persistence.*;

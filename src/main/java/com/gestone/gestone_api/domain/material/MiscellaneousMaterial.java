@@ -3,8 +3,12 @@ package com.gestone.gestone_api.domain.material;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class MiscellaneousMaterial {
@@ -17,8 +21,6 @@ public class MiscellaneousMaterial {
     private BigDecimal lastPrice = BigDecimal.ZERO;
     @Enumerated(value = EnumType.STRING)
     private MiscellaneousMaterialType miscellaneousMaterialType;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Marbleshop marbleshop;
 
     public MiscellaneousMaterial() {
     }
