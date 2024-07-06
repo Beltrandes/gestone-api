@@ -1,7 +1,8 @@
-package com.gestone.gestone_api.domain.quotation;
+package com.gestone.gestone_api.domain.marbleshop_item;
 
 import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
-import com.gestone.gestone_api.domain.order.ServiceOrder;
+import com.gestone.gestone_api.domain.order.MarbleshopOrder;
+import com.gestone.gestone_api.domain.quotation.Quotation;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -25,13 +26,14 @@ public class MarbleshopItem {
     private BigDecimal unitArea = BigDecimal.ZERO;
     private BigDecimal totalValue = BigDecimal.ZERO;
     private BigDecimal totalArea = BigDecimal.ZERO;
+    @Enumerated(value = EnumType.STRING)
     private MarbleshopItemType marbleshopItemType;
-
+    @OneToMany(mappedBy = "marbleshopItem", cascade = CascadeType.ALL)
     private List<MarbleshopSubItem> marbleshopSubItems = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     private Quotation quotation;
     @ManyToOne(fetch = FetchType.LAZY)
-    private ServiceOrder serviceOrder;
+    private MarbleshopOrder marbleshopOrder;
 
 
     public MarbleshopItem() {
@@ -166,11 +168,11 @@ public class MarbleshopItem {
         this.quotation = quotation;
     }
 
-    public ServiceOrder getServiceOrder() {
-        return serviceOrder;
+    public MarbleshopOrder getServiceOrder() {
+        return marbleshopOrder;
     }
 
-    public void setServiceOrder(ServiceOrder serviceOrder) {
-        this.serviceOrder = serviceOrder;
+    public void setServiceOrder(MarbleshopOrder marbleshopOrder) {
+        this.marbleshopOrder = marbleshopOrder;
     }
 }

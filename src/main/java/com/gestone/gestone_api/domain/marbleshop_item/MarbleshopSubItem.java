@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.domain.quotation;
+package com.gestone.gestone_api.domain.marbleshop_item;
 
 import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
 import jakarta.persistence.*;
@@ -17,6 +17,7 @@ public class MarbleshopSubItem {
     private BigDecimal area = BigDecimal.ZERO;
     @OneToOne
     private MarbleshopMaterial marbleshopMaterial;
+    @Enumerated(value = EnumType.STRING)
     private MarbleshopSubItemType marbleshopSubItemType;
     @ManyToOne(fetch = FetchType.LAZY)
     private MarbleshopItem marbleshopItem;

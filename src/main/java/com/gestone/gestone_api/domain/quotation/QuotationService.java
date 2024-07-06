@@ -4,6 +4,8 @@ import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.customer.CustomerService;
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.domain.marbleshop.MarbleshopService;
+import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
+import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItemRepository;
 import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
 import com.gestone.gestone_api.domain.material.MarbleshopMaterialService;
 import com.gestone.gestone_api.infra.security.TokenService;

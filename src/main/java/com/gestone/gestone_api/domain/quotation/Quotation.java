@@ -2,6 +2,8 @@ package com.gestone.gestone_api.domain.quotation;
 
 import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
+import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
+import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 

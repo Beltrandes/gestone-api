@@ -1,5 +1,7 @@
-package com.gestone.gestone_api.domain.quotation;
+package com.gestone.gestone_api.domain.miscellaneous_item;
 
+import com.gestone.gestone_api.domain.order.MarbleshopOrder;
+import com.gestone.gestone_api.domain.quotation.Quotation;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
@@ -18,19 +20,22 @@ public class MiscellaneousItem {
     private BigDecimal totalValue = BigDecimal.ZERO;
     @OneToOne
     private MiscellaneousMaterial miscellaneousMaterial;
-    @ManyToOne
-    private MarbleshopItem marbleshopItem;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Quotation quotation;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private MarbleshopOrder marbleshopOrder;
 
     public MiscellaneousItem() {
     }
 
     public MiscellaneousItem(String name, String details, Integer quantity, MiscellaneousMaterial miscellaneousMaterial,
-            MarbleshopItem marbleshopItem) {
+            Quotation quotation, MarbleshopOrder marbleshopOrder) {
         this.name = name;
         this.details = details;
         this.quantity = quantity;
         this.miscellaneousMaterial = miscellaneousMaterial;
-        this.marbleshopItem = marbleshopItem;
+        this.quotation = quotation;
+        this.marbleshopOrder = marbleshopOrder;
     }
 
     public UUID getId() {
@@ -85,12 +90,12 @@ public class MiscellaneousItem {
         this.miscellaneousMaterial = miscellaneousMaterial;
     }
 
-    public MarbleshopItem getMarbleshopItem() {
-        return marbleshopItem;
+    public Quotation getQuotation() {
+        return quotation;
     }
 
-    public void setMarbleshopItem(MarbleshopItem marbleshopItem) {
-        this.marbleshopItem = marbleshopItem;
+    public void setQuotation(Quotation quotation) {
+        this.quotation = quotation;
     }
 
 }
