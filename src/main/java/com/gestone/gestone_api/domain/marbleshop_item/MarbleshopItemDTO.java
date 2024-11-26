@@ -10,6 +10,7 @@ public record MarbleshopItemDTO(
     BigDecimal measureY,
     Integer quantity,
     UUID marbleshopMaterialId,
+    UUID quotationId,
     List<MarbleshopSubItemDTO> marbleshopSubItems
 ) {
 

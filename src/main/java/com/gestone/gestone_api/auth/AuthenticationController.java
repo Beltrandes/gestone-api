@@ -22,7 +22,7 @@ import jakarta.validation.Valid;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("api/v1/auth")
 public class AuthenticationController {
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -42,7 +42,8 @@ public class AuthenticationController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.email(), data.password());
         var auth = authenticationManager.authenticate(usernamePassword);
         var token = tokenService.generateToken((User) auth.getPrincipal());
-        return ResponseEntity.ok(new LoginResponseDTO(token));
+        var marbleshop = tokenService.getMarbleshopFromToken(token);
+        return ResponseEntity.ok(new LoginResponseDTO(token, marbleshop.getId()));
     }
 
     @PostMapping("/register/admin")

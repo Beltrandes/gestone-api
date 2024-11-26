@@ -1,37 +1,23 @@
 package com.gestone.gestone_api.domain.material;
 
-import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Entity
-public class MiscellaneousMaterial {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
+public class MiscellaneousMaterialResponseDTO {
     private UUID id;
     private String name;
     private String details;
-    private BigDecimal price = BigDecimal.ZERO;
-    private BigDecimal lastPrice = BigDecimal.ZERO;
-    @Enumerated(value = EnumType.STRING)
+    private BigDecimal price;
+    private BigDecimal lastPrice;
     private MiscellaneousMaterialType miscellaneousMaterialType;
-    @CreationTimestamp
-    private LocalDateTime createdAt;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Marbleshop marbleshop;
 
-    public MiscellaneousMaterial() {
-    }
-
-    public MiscellaneousMaterial(String name, String details, BigDecimal price, MiscellaneousMaterialType miscellaneousMaterialType) {
-        this.name = name;
-        this.details = details;
-        this.price = price;
-        this.miscellaneousMaterialType = miscellaneousMaterialType;
+    public MiscellaneousMaterialResponseDTO(MiscellaneousMaterial miscellaneousMaterial) {
+        this.id = miscellaneousMaterial.getId();
+        this.name = miscellaneousMaterial.getName();
+        this.details = miscellaneousMaterial.getDetails();
+        this.price = miscellaneousMaterial.getPrice();
+        this.lastPrice = miscellaneousMaterial.getLastPrice();
+        this.miscellaneousMaterialType = miscellaneousMaterial.getMiscellaneousMaterialType();
     }
 
     public UUID getId() {
@@ -77,18 +63,4 @@ public class MiscellaneousMaterial {
     public void setMiscellaneousMaterialType(MiscellaneousMaterialType miscellaneousMaterialType) {
         this.miscellaneousMaterialType = miscellaneousMaterialType;
     }
-
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public Marbleshop getMarbleshop() {
-        return marbleshop;
-    }
-
-    public void setMarbleshop(Marbleshop marbleshop) {
-        this.marbleshop = marbleshop;
-    }
-
 }

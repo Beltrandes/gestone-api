@@ -8,12 +8,16 @@ import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItemRepository;
 import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
 import com.gestone.gestone_api.domain.material.MarbleshopMaterialService;
+import com.gestone.gestone_api.domain.material.MiscellaneousMaterial;
+import com.gestone.gestone_api.domain.material.MiscellaneousMaterialService;
+import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
 import com.gestone.gestone_api.infra.security.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class QuotationService implements IQuotationService {
@@ -25,6 +29,8 @@ public class QuotationService implements IQuotationService {
     private CustomerService customerService;
     @Autowired
     private MarbleshopMaterialService marbleshopMaterialService;
+    @Autowired
+    private MiscellaneousMaterialService miscellaneousMaterialService;
     @Autowired
     private TokenService tokenService;
     @Autowired
@@ -56,6 +62,16 @@ public class QuotationService implements IQuotationService {
             marbleshopItem.calculate();
             return marbleshopItem;
         }).toList();
+        List<MiscellaneousItem> miscellaneousItems = quotationDTO.miscellaneousItems().stream().map(miscellaneousItemDTO -> {
+            MiscellaneousMaterial miscellaneousMaterial = miscellaneousMaterialService.findById(miscellaneousItemDTO.miscellaneousMaterialId());
+            MiscellaneousItem miscellaneousItem = new MiscellaneousItem();
+            miscellaneousItem.setName(miscellaneousItemDTO.name());
+            miscellaneousItem.setDetails(miscellaneousItemDTO.details());
+            miscellaneousItem.setQuantity(miscellaneousItemDTO.quantity());
+            miscellaneousItem.setQuotation(quotation);
+            return miscellaneousItem;
+        }).toList();
+        quotation.setMiscellaneousItems(miscellaneousItems);
         quotation.setMarbleshopItems(marbleshopItems);
         quotation.calculate();
         return quotationRepository.save(quotation);
@@ -75,6 +91,11 @@ public class QuotationService implements IQuotationService {
         marbleshop.setQuotations(quotations);
         marbleshopService.saveMarbleshop(marbleshop);
         return marbleshop.getQuotations();
+    }
+
+
+    public Quotation findById(UUID id) {
+        return quotationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Quotation not found with id: " + id));
     }
 
 

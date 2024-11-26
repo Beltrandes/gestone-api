@@ -16,12 +16,20 @@ public class MaterialController {
     @Autowired
     private MarbleshopMaterialService marbleshopMaterialService;
     @Autowired
+    private MiscellaneousMaterialService miscellaneousMaterialService;
+    @Autowired
     private TokenService tokenService;
 
-    @PostMapping
+    @PostMapping("marbleshop")
     public ResponseEntity<MarbleshopMaterialResponseDTO> saveMarbleshopMaterial(@RequestBody MarbleshopMaterialDTO marbleshopMaterialDTO, HttpServletRequest request) {
         var savedMarbleshopMaterial = marbleshopMaterialService.save(marbleshopMaterialDTO, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new MarbleshopMaterialResponseDTO(savedMarbleshopMaterial));
+    }
+
+    @PostMapping("miscellaneous")
+    public ResponseEntity<MiscellaneousMaterialResponseDTO> saveMiscellaneousMaterial(@RequestBody MiscellaneousMaterialDTO miscellaneousMaterialDTO, HttpServletRequest request) {
+        var savedMarbleshopMaterial = miscellaneousMaterialService.save(miscellaneousMaterialDTO, request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new MiscellaneousMaterialResponseDTO(savedMarbleshopMaterial));
     }
 
     @GetMapping

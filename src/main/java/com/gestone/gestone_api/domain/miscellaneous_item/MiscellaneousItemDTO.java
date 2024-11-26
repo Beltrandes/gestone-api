@@ -4,7 +4,7 @@ import java.util.UUID;
 
 public record MiscellaneousItemDTO(
         String name,
-        String description,
+        String details,
         Integer quantity,
         UUID miscellaneousMaterialId
 

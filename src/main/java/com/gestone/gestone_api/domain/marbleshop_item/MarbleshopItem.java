@@ -48,7 +48,9 @@ public class MarbleshopItem {
 
     public void calculate() {
         this.unitArea = this.measureX.multiply(this.measureY);
-        this.unitValue = this.unitArea.multiply(this.marbleshopMaterial.getPrice());
+        if (this.marbleshopMaterial.getPrice() != null) {
+            this.unitValue = this.unitArea.multiply(this.marbleshopMaterial.getPrice());
+        }
         marbleshopSubItems.forEach(marbleshopSubItem -> {
             marbleshopSubItem.calculate();
             this.unitValue = this.unitValue.add(marbleshopSubItem.getValue());

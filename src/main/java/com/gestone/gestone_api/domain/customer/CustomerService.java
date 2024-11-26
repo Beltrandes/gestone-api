@@ -41,8 +41,10 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public List<Customer> findAll(UUID marbleshopId) {
-        return null;
+       return customerRepository.findAllByMarbleshopId(marbleshopId);
     }
+
+
 
     @Override
     public void delete(UUID id) {

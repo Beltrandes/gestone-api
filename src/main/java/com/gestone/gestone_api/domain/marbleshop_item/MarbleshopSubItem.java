@@ -2,8 +2,10 @@ package com.gestone.gestone_api.domain.marbleshop_item;
 
 import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -13,6 +15,7 @@ public class MarbleshopSubItem {
     private UUID id;
     private BigDecimal measureX = BigDecimal.ZERO;
     private BigDecimal measureY = BigDecimal.ZERO;
+    private Integer quantity;
     private BigDecimal value = BigDecimal.ZERO;
     private BigDecimal area = BigDecimal.ZERO;
     @OneToOne
@@ -22,14 +25,18 @@ public class MarbleshopSubItem {
     @ManyToOne(fetch = FetchType.LAZY)
     private MarbleshopItem marbleshopItem;
 
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+
 
     public MarbleshopSubItem() {
     }
 
 
-    public MarbleshopSubItem(BigDecimal measureX, BigDecimal measureY, MarbleshopSubItemType marbleshopSubItemType, MarbleshopItem marbleshopItem) {
+    public MarbleshopSubItem(BigDecimal measureX, BigDecimal measureY,Integer quantity,MarbleshopSubItemType marbleshopSubItemType, MarbleshopItem marbleshopItem) {
         this.measureX = measureX;
         this.measureY = measureY;
+        this.quantity = quantity;
         this.marbleshopSubItemType = marbleshopSubItemType;
         this.marbleshopItem = marbleshopItem;
     }
@@ -100,4 +107,19 @@ public class MarbleshopSubItem {
         this.marbleshopMaterial = marbleshopMaterial;
     }
 
+    public Integer getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

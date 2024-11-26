@@ -1,0 +1,1 @@
+ALTER TABLE miscellaneous_material ADD COLUMN created_at TIMESTAMP WITHOUT TIME ZONE;

@@ -20,7 +20,7 @@ public class MarbleshopMaterial {
     private MarbleshopMaterialType marbleshopMaterialType;
     @CreationTimestamp
     private LocalDateTime createdAt;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Marbleshop marbleshop;
 
     public MarbleshopMaterial() {
