@@ -7,9 +7,11 @@ import java.util.UUID;
 
 public interface ICustomerService {
 
-    Customer save(CustomerDTO customerDTO, HttpServletRequest request);
+    Customer save(Customer customer);
 
     Customer findById(UUID id);
+
+    Customer update(Customer customer, UUID customerId);
 
     List<Customer> findAll(UUID marbleshopId);
 

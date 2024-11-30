@@ -3,6 +3,7 @@ package com.gestone.gestone_api.domain.quotation;
 import com.gestone.gestone_api.domain.customer.CustomerListResponseDTO;
 import com.gestone.gestone_api.domain.marbleshop.MarbleshopResponseDTO;
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItemResponseDTO;
+import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
 import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItemResponseDTO;
 
 import java.math.BigDecimal;
@@ -37,6 +38,7 @@ public class QuotationResponseDTO {
         this.totalArea = quotation.getTotalArea();
         this.quotationStatus = quotation.getQuotationStatus();
         this.customer = new CustomerListResponseDTO(quotation.getCustomer());
+        this.miscellaneousItems = quotation.getMiscellaneousItems().stream().map(MiscellaneousItemResponseDTO::new).toList();
         this.marbleshopItems = quotation.getMarbleshopItems().stream().map(MarbleshopItemResponseDTO::new).toList();
         this.marbleshop = new MarbleshopResponseDTO(quotation.getMarbleshop());
         this.createdAt = quotation.getCreatedAt();
@@ -118,12 +120,20 @@ public class QuotationResponseDTO {
         this.customer = customer;
     }
 
-    public List<MarbleshopItemResponseDTO> getQuoteItems() {
+    public List<MarbleshopItemResponseDTO> getMarbleshopItems() {
         return marbleshopItems;
     }
 
-    public void setQuoteItems(List<MarbleshopItemResponseDTO> marbleshopItems) {
+    public void setMarbleshopItems(List<MarbleshopItemResponseDTO> marbleshopItems) {
         this.marbleshopItems = marbleshopItems;
+    }
+
+    public List<MiscellaneousItemResponseDTO> getMiscellaneousItems() {
+        return miscellaneousItems;
+    }
+
+    public void setMiscellaneousItems(List<MiscellaneousItemResponseDTO> miscellaneousItems) {
+        this.miscellaneousItems = miscellaneousItems;
     }
 
     public MarbleshopResponseDTO getMarbleshop() {

@@ -18,15 +18,7 @@ public class CustomerService implements ICustomerService {
     private TokenService tokenService;
 
     @Override
-    public Customer save(CustomerDTO customerDTO, HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
-        Customer customer = new Customer();
-        customer.setName(customerDTO.name());
-        customer.setPhone(customerDTO.phone());
-        customer.setEmail(customerDTO.email());
-        customer.setAddress(customerDTO.address());
-        customer.setMarbleshop(marbleshop);
+    public Customer save(Customer customer) {
         return customerRepository.save(customer);
     }
 
@@ -40,6 +32,17 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
+    public Customer update(Customer customer, UUID customerId) {
+        var customerSaved = this.findById(customerId);
+        customerSaved.setName(customer.getName());
+        customerSaved.setPhone(customer.getPhone());
+        customerSaved.setEmail(customer.getEmail());
+        customerSaved.setAddress(customer.getAddress());
+        return customerRepository.save(customerSaved);
+
+    }
+
+    @Override
     public List<Customer> findAll(UUID marbleshopId) {
        return customerRepository.findAllByMarbleshopId(marbleshopId);
     }
@@ -48,6 +51,7 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public void delete(UUID id) {
-
+       var customer = this.findById(id);
+       customerRepository.delete(customer);
     }
 }

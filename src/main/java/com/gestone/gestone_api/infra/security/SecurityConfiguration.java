@@ -26,25 +26,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register/admin").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/auth/register/employee").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/user/admin").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/employee").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/material").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/material").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/customer").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/customer").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/quotation").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/quotation").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/material/marbleshop").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/material/miscellaneous").hasRole("ADMIN")
-                        .anyRequest().authenticated())
-                        .csrf(csrf -> csrf.disable())
-                        .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-                        .build();
+        return httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource())).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll().requestMatchers(HttpMethod.POST, "/api/v1/auth/register/admin").permitAll().requestMatchers(HttpMethod.POST, "/api/v1/auth/register/employee").permitAll().requestMatchers(HttpMethod.POST, "/api/v1/user/admin").hasRole("ADMIN").requestMatchers(HttpMethod.POST, "/api/v1/employee").hasRole("ADMIN").requestMatchers(HttpMethod.POST, "/api/v1/material").hasRole("ADMIN").requestMatchers(HttpMethod.GET, "/api/v1/material").hasRole("ADMIN").requestMatchers(HttpMethod.POST, "/api/v1/customer").hasRole("ADMIN").requestMatchers(HttpMethod.DELETE, "/api/v1/customer").hasRole("ADMIN").requestMatchers(HttpMethod.PUT, "/api/v1/customer").hasRole("ADMIN").requestMatchers(HttpMethod.GET, "/api/v1/customer").hasRole("ADMIN").requestMatchers(HttpMethod.POST, "/api/v1/quotation").hasRole("ADMIN").requestMatchers(HttpMethod.GET, "/api/v1/quotation").hasRole("ADMIN").requestMatchers(HttpMethod.POST, "/api/v1/material/marbleshop").hasRole("ADMIN").requestMatchers(HttpMethod.POST, "/api/v1/material/miscellaneous").hasRole("ADMIN").anyRequest().authenticated()).csrf(csrf -> csrf.disable()).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
     @Bean

@@ -1,5 +1,6 @@
 package com.gestone.gestone_api.domain.customer;
 
+import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.domain.marbleshop.MarbleshopResponseDTO;
 
 import java.time.LocalDateTime;
@@ -7,13 +8,13 @@ import java.util.UUID;
 
 public class CustomerResponseDTO {
 
-    private UUID id;
-    private String name;
-    private String phone;
-    private String email;
-    private String address;
-    private MarbleshopResponseDTO marbleshop;
-    private LocalDateTime createdAt;
+     UUID id;
+     String name;
+     String phone;
+     String email;
+     String address;
+     MarbleshopResponseDTO marbleshop;
+     LocalDateTime createdAt;
 
     public CustomerResponseDTO(Customer customer) {
         this.id = customer.getId();

@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/material")
-public class MaterialController {
+public class MarbleshopMaterialController {
     @Autowired
     private MarbleshopMaterialService marbleshopMaterialService;
     @Autowired
@@ -20,13 +20,13 @@ public class MaterialController {
     @Autowired
     private TokenService tokenService;
 
-    @PostMapping("marbleshop")
+    @PostMapping("/marbleshop")
     public ResponseEntity<MarbleshopMaterialResponseDTO> saveMarbleshopMaterial(@RequestBody MarbleshopMaterialDTO marbleshopMaterialDTO, HttpServletRequest request) {
         var savedMarbleshopMaterial = marbleshopMaterialService.save(marbleshopMaterialDTO, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new MarbleshopMaterialResponseDTO(savedMarbleshopMaterial));
     }
 
-    @PostMapping("miscellaneous")
+    @PostMapping("/miscellaneous")
     public ResponseEntity<MiscellaneousMaterialResponseDTO> saveMiscellaneousMaterial(@RequestBody MiscellaneousMaterialDTO miscellaneousMaterialDTO, HttpServletRequest request) {
         var savedMarbleshopMaterial = miscellaneousMaterialService.save(miscellaneousMaterialDTO, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new MiscellaneousMaterialResponseDTO(savedMarbleshopMaterial));

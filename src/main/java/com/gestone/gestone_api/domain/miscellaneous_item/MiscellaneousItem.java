@@ -16,7 +16,7 @@ public class MiscellaneousItem {
     private String name;
     private String details;
     private Integer quantity;
-    private BigDecimal value = BigDecimal.ZERO;
+    private BigDecimal unitValue = BigDecimal.ZERO;
     private BigDecimal totalValue = BigDecimal.ZERO;
     @OneToOne
     private MiscellaneousMaterial miscellaneousMaterial;
@@ -66,12 +66,12 @@ public class MiscellaneousItem {
         this.quantity = quantity;
     }
 
-    public BigDecimal getValue() {
-        return value;
+    public BigDecimal getUnitValue() {
+        return unitValue;
     }
 
-    public void setValue(BigDecimal value) {
-        this.value = value;
+    public void setUnitValue(BigDecimal unitValue) {
+        this.unitValue = unitValue;
     }
 
     public BigDecimal getTotalValue() {
