@@ -1,0 +1,3 @@
+ALTER TABLE quotation ADD COLUMN local_id INT;
+
+ALTER TABLE quotation ADD CONSTRAINT UNIQUE_LOCAL_ID_PER_MARBLESHOP UNIQUE (marbleshop_id, local_id);

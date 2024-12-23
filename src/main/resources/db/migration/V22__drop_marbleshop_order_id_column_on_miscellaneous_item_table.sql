@@ -1,0 +1,1 @@
+ALTER TABLE miscellaneous_item DROP COLUMN IF EXISTS marbleshop_order_id;

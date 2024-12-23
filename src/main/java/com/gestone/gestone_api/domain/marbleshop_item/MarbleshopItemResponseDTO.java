@@ -1,5 +1,8 @@
 package com.gestone.gestone_api.domain.marbleshop_item;
 
+import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
+import com.gestone.gestone_api.domain.material.MarbleshopMaterialResponseDTO;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
@@ -15,7 +18,9 @@ public class MarbleshopItemResponseDTO {
     BigDecimal totalValue;
     BigDecimal totalArea;
     Integer quantity;
-    UUID marbleshopMaterialId;
+
+    MarbleshopItemType marbleshopItemType;
+    MarbleshopMaterialResponseDTO marbleshopMaterial;
     List<MarbleshopSubItemResponseDTO> marbleshopSubItems;
 
 
@@ -30,7 +35,8 @@ public class MarbleshopItemResponseDTO {
         this.totalValue = marbleshopItem.getTotalValue();
         this.totalArea = marbleshopItem.getTotalArea();
         this.quantity = marbleshopItem.getQuantity();
-        this.marbleshopMaterialId = marbleshopItem.getMarbleshopMaterial().getId();
+        this.marbleshopItemType = marbleshopItem.getMarbleshopItemType();
+        this.marbleshopMaterial = new MarbleshopMaterialResponseDTO(marbleshopItem.getMarbleshopMaterial());
         this.marbleshopSubItems = marbleshopItem.getMarbleshopSubItems().stream().map(MarbleshopSubItemResponseDTO::new).toList();
     }
 
@@ -106,12 +112,8 @@ public class MarbleshopItemResponseDTO {
         this.quantity = quantity;
     }
 
-    public UUID getMarbleshopMaterialId() {
-        return marbleshopMaterialId;
-    }
-
-    public void setMarbleshopMaterialId(UUID marbleshopMaterialId) {
-        this.marbleshopMaterialId = marbleshopMaterialId;
+    public MarbleshopMaterialResponseDTO getMarbleshopMaterial() {
+        return marbleshopMaterial;
     }
 
     public List<MarbleshopSubItemResponseDTO> getMarbleshopSubItems() {
@@ -120,5 +122,17 @@ public class MarbleshopItemResponseDTO {
 
     public void setMarbleshopSubItems(List<MarbleshopSubItemResponseDTO> marbleshopSubItems) {
         this.marbleshopSubItems = marbleshopSubItems;
+    }
+
+    public MarbleshopItemType getMarbleshopItemType() {
+        return marbleshopItemType;
+    }
+
+    public void setMarbleshopItemType(MarbleshopItemType marbleshopItemType) {
+        this.marbleshopItemType = marbleshopItemType;
+    }
+
+    public void setMarbleshopMaterial(MarbleshopMaterialResponseDTO marbleshopMaterial) {
+        this.marbleshopMaterial = marbleshopMaterial;
     }
 }

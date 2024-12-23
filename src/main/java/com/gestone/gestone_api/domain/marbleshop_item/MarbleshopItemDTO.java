@@ -11,7 +11,8 @@ public record MarbleshopItemDTO(
     Integer quantity,
     UUID marbleshopMaterialId,
     UUID quotationId,
-    List<MarbleshopSubItemDTO> marbleshopSubItems
+    List<MarbleshopSubItemDTO> marbleshopSubItems,
+    MarbleshopItemType marbleshopItemType
 ) {
 
 }

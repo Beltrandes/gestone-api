@@ -9,7 +9,6 @@ public record MarbleshopSubItemDTO(
         BigDecimal measureX,
         BigDecimal measureY,
         Integer quantity,
-        UUID marbleshopMaterialId,
         MarbleshopSubItemType marbleshopSubItemType,
         UUID marbleshopItemId
 ) {

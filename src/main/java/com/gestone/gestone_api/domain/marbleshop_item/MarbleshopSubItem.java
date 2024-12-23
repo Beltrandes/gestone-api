@@ -13,13 +13,16 @@ public class MarbleshopSubItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+
+    private String name;
+    private String description;
     private BigDecimal measureX = BigDecimal.ZERO;
     private BigDecimal measureY = BigDecimal.ZERO;
     private Integer quantity;
     private BigDecimal value = BigDecimal.ZERO;
+    private BigDecimal totalValue = BigDecimal.ZERO;
     private BigDecimal area = BigDecimal.ZERO;
-    @OneToOne
-    private MarbleshopMaterial marbleshopMaterial;
+    private BigDecimal totalArea = BigDecimal.ZERO;
     @Enumerated(value = EnumType.STRING)
     private MarbleshopSubItemType marbleshopSubItemType;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -33,7 +36,8 @@ public class MarbleshopSubItem {
     }
 
 
-    public MarbleshopSubItem(BigDecimal measureX, BigDecimal measureY,Integer quantity,MarbleshopSubItemType marbleshopSubItemType, MarbleshopItem marbleshopItem) {
+    public MarbleshopSubItem(String description,BigDecimal measureX, BigDecimal measureY,Integer quantity,MarbleshopSubItemType marbleshopSubItemType, MarbleshopItem marbleshopItem) {
+        this.description = description;
         this.measureX = measureX;
         this.measureY = measureY;
         this.quantity = quantity;
@@ -43,11 +47,31 @@ public class MarbleshopSubItem {
 
     public void calculate() {
         this.area = this.measureX.multiply(this.measureY);
-        this.value = this.area.multiply(this.marbleshopMaterial.getPrice());
+        this.totalArea = this.area.multiply(BigDecimal.valueOf(this.quantity));
+        if (this.marbleshopItem != null) {
+            this.value = this.area.multiply(this.marbleshopItem.getMarbleshopMaterial().getPrice());
+            this.totalValue = this.value.multiply(BigDecimal.valueOf(this.quantity));
+        }
     }
 
     public UUID getId() {
         return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public BigDecimal getMeasureX() {
@@ -86,6 +110,7 @@ public class MarbleshopSubItem {
         return value;
     }
 
+
     public void setValue(BigDecimal value) {
         this.value = value;
     }
@@ -98,13 +123,20 @@ public class MarbleshopSubItem {
         this.area = area;
     }
 
-
-    public MarbleshopMaterial getMarbleshopMaterial() {
-        return marbleshopMaterial;
+    public BigDecimal getTotalValue() {
+        return totalValue;
     }
 
-    public void setMarbleshopMaterial(MarbleshopMaterial marbleshopMaterial) {
-        this.marbleshopMaterial = marbleshopMaterial;
+    public void setTotalValue(BigDecimal totalValue) {
+        this.totalValue = totalValue;
+    }
+
+    public BigDecimal getTotalArea() {
+        return totalArea;
+    }
+
+    public void setTotalArea(BigDecimal totalArea) {
+        this.totalArea = totalArea;
     }
 
     public Integer getQuantity() {

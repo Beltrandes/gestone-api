@@ -28,7 +28,7 @@ public class MarbleshopItem {
     private BigDecimal totalArea = BigDecimal.ZERO;
     @Enumerated(value = EnumType.STRING)
     private MarbleshopItemType marbleshopItemType;
-    @OneToMany(mappedBy = "marbleshopItem", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "marbleshopItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MarbleshopSubItem> marbleshopSubItems = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     private Quotation quotation;
@@ -53,8 +53,8 @@ public class MarbleshopItem {
         }
         marbleshopSubItems.forEach(marbleshopSubItem -> {
             marbleshopSubItem.calculate();
-            this.unitValue = this.unitValue.add(marbleshopSubItem.getValue());
-            this.unitArea = this.unitArea.add(marbleshopSubItem.getArea());
+            this.unitValue = this.unitValue.add(marbleshopSubItem.getTotalValue());
+            this.unitArea = this.unitArea.add(marbleshopSubItem.getTotalArea());
 
         });
         this.totalValue = this.unitValue.multiply(BigDecimal.valueOf(this.quantity));

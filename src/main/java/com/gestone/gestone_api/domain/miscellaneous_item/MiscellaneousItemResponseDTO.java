@@ -2,6 +2,7 @@ package com.gestone.gestone_api.domain.miscellaneous_item;
 
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopSubItemResponseDTO;
 import com.gestone.gestone_api.domain.material.MiscellaneousMaterial;
+import com.gestone.gestone_api.domain.material.MiscellaneousMaterialResponseDTO;
 import com.gestone.gestone_api.domain.order.MarbleshopOrder;
 import com.gestone.gestone_api.domain.quotation.Quotation;
 import jakarta.persistence.*;
@@ -17,7 +18,7 @@ public class MiscellaneousItemResponseDTO {
     private Integer quantity;
     private BigDecimal unitValue;
     private BigDecimal totalValue;
-    private MiscellaneousMaterial miscellaneousMaterial;
+    private MiscellaneousMaterialResponseDTO miscellaneousMaterial;
 
     public MiscellaneousItemResponseDTO(MiscellaneousItem miscellaneousItem) {
         this.id = miscellaneousItem.getId();
@@ -26,7 +27,7 @@ public class MiscellaneousItemResponseDTO {
         this.quantity = miscellaneousItem.getQuantity();
         this.unitValue = miscellaneousItem.getUnitValue();
         this.totalValue = miscellaneousItem.getTotalValue();
-        this.miscellaneousMaterial = miscellaneousItem.getMiscellaneousMaterial();
+        this.miscellaneousMaterial = new MiscellaneousMaterialResponseDTO(miscellaneousItem.getMiscellaneousMaterial());
     }
 
     public String getName() {
@@ -69,11 +70,11 @@ public class MiscellaneousItemResponseDTO {
         this.totalValue = totalValue;
     }
 
-    public MiscellaneousMaterial getMiscellaneousMaterial() {
+    public MiscellaneousMaterialResponseDTO getMiscellaneousMaterial() {
         return miscellaneousMaterial;
     }
 
-    public void setMiscellaneousMaterial(MiscellaneousMaterial miscellaneousMaterial) {
+    public void setMiscellaneousMaterial(MiscellaneousMaterialResponseDTO miscellaneousMaterial) {
         this.miscellaneousMaterial = miscellaneousMaterial;
     }
 }

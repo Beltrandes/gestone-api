@@ -13,6 +13,7 @@ public record QuotationDTO(
         Integer deadlineDays,
         Integer daysForDue,
         UUID customerId,
+        String userEmail,
         List<MarbleshopItemDTO> marbleshopItems,
         List<MiscellaneousItemDTO> miscellaneousItems
 ) {

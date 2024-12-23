@@ -6,17 +6,22 @@ import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.domain.marbleshop.MarbleshopService;
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItemRepository;
+import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopSubItem;
 import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
 import com.gestone.gestone_api.domain.material.MarbleshopMaterialService;
 import com.gestone.gestone_api.domain.material.MiscellaneousMaterial;
 import com.gestone.gestone_api.domain.material.MiscellaneousMaterialService;
 import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
+import com.gestone.gestone_api.domain.user.User;
+import com.gestone.gestone_api.domain.user.UserService;
 import com.gestone.gestone_api.infra.security.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -35,14 +40,20 @@ public class QuotationService implements IQuotationService {
     private TokenService tokenService;
     @Autowired
     private MarbleshopService marbleshopService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private QuotationPdfService pdfService;
 
     @Override
     public Quotation save(QuotationDTO quotationDTO, HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
         Customer customer = customerService.findById(quotationDTO.customerId());
+        User user = userService.findByEmail(quotationDTO.userEmail());
         Quotation quotation = new Quotation();
         quotation.setName(quotationDTO.name());
+        quotation.setUser(user);
         quotation.setDetails(quotationDTO.details());
         quotation.setAddress(quotationDTO.address());
         quotation.setDeadlineDays(quotationDTO.deadlineDays());
@@ -57,8 +68,23 @@ public class QuotationService implements IQuotationService {
             marbleshopItem.setMeasureX(marbleshopItemDTO.measureX());
             marbleshopItem.setMeasureY(marbleshopItemDTO.measureY());
             marbleshopItem.setQuantity(marbleshopItemDTO.quantity());
+            marbleshopItem.setMarbleshopItemType(marbleshopItemDTO.marbleshopItemType());
             marbleshopItem.setQuotation(quotation);
             marbleshopItem.setMarbleshopMaterial(marbleshopMaterial);
+            List<MarbleshopSubItem> marbleshopSubItems = Optional.ofNullable(marbleshopItemDTO.marbleshopSubItems()).orElse(List.of()).stream().map(marbleshopSubItemDTO -> {
+                MarbleshopSubItem marbleshopSubItem = new MarbleshopSubItem();
+                marbleshopSubItem.setName(marbleshopSubItemDTO.name());
+                marbleshopSubItem.setDescription(marbleshopSubItemDTO.description());
+                marbleshopSubItem.setMeasureX(marbleshopSubItemDTO.measureX());
+                marbleshopSubItem.setMeasureY(marbleshopSubItemDTO.measureY());
+                marbleshopSubItem.setQuantity(marbleshopSubItemDTO.quantity());
+                marbleshopSubItem.setMarbleshopSubItemType(marbleshopSubItemDTO.marbleshopSubItemType());
+                marbleshopSubItem.setMarbleshopItem(marbleshopItem);
+                marbleshopSubItem.calculate();
+                return marbleshopSubItem;
+            }).toList();
+
+            marbleshopItem.setMarbleshopSubItems(marbleshopSubItems);
             marbleshopItem.calculate();
             return marbleshopItem;
         }).toList();
@@ -68,12 +94,16 @@ public class QuotationService implements IQuotationService {
             miscellaneousItem.setName(miscellaneousItemDTO.name());
             miscellaneousItem.setDetails(miscellaneousItemDTO.details());
             miscellaneousItem.setQuantity(miscellaneousItemDTO.quantity());
+            miscellaneousItem.setMiscellaneousMaterial(miscellaneousMaterial);
             miscellaneousItem.setQuotation(quotation);
+            miscellaneousItem.calculate();
             return miscellaneousItem;
         }).toList();
         quotation.setMiscellaneousItems(miscellaneousItems);
         quotation.setMarbleshopItems(marbleshopItems);
         quotation.calculate();
+        Integer maxLocalId = quotationRepository.findMaxLocalIdByMarbleshop(marbleshop.getId());
+        quotation.setLocalId((maxLocalId != null ? maxLocalId: 0) + 1);
         return quotationRepository.save(quotation);
 
     }
@@ -83,20 +113,13 @@ public class QuotationService implements IQuotationService {
         return quotationRepository.save(quotation);
     }
 
-    public List<Quotation> findAll(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
-        List<Quotation> quotations = marbleshop.getQuotations();
-        quotations.forEach(this::validateDueDate);
-        marbleshop.setQuotations(quotations);
-        marbleshopService.saveMarbleshop(marbleshop);
-        return marbleshop.getQuotations();
+    public List<Quotation> findAll(UUID marbleshopId) {
+        return quotationRepository.findAllByMarbleshopId(marbleshopId);
     }
 
 
     public Quotation findById(UUID id) {
         return quotationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Quotation not found with id: " + id));
     }
-
 
 }

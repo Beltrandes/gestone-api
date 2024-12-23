@@ -34,6 +34,8 @@ public class Marbleshop {
     private List<MiscellaneousMaterial> miscellaneousMaterials = new ArrayList<>();
     @OneToMany(mappedBy = "marbleshop")
     private List<Quotation> quotations = new ArrayList<>();
+
+    private String logoPath;
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -90,6 +92,13 @@ public class Marbleshop {
         return marbleshopMaterials;
     }
 
+    public String getLogoPath() {
+        return logoPath;
+    }
+
+    public void setLogoPath(String logoPath) {
+        this.logoPath = logoPath;
+    }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

@@ -1,0 +1,1 @@
+ALTER TABLE marbleshop_sub_item ADD COLUMN total_value DECIMAL(10, 2);

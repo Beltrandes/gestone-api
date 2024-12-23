@@ -1,0 +1,1 @@
+ALTER TABLE marbleshop_sub_item DROP COLUMN IF EXISTS marbleshop_material_id;

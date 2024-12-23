@@ -23,8 +23,6 @@ public class MarbleshopOrder {
     @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL)
     private List<MarbleshopItem> marbleshopItems = new ArrayList<>();
     @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL)
-    private List<MiscellaneousItem> miscellaneousItems = new ArrayList<>();
-    @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     private Marbleshop marbleshop;
@@ -34,7 +32,6 @@ public class MarbleshopOrder {
 
     public void calculate() {
         this.totalValue = marbleshopItems.stream().map(MarbleshopItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add);
-        this.totalValue = this.totalValue.add(miscellaneousItems.stream().map(MiscellaneousItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add));
         this.totalArea = marbleshopItems.stream().map(MarbleshopItem::getTotalArea).reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
@@ -71,14 +68,6 @@ public class MarbleshopOrder {
 
     public void setMarbleshopItems(List<MarbleshopItem> marbleshopItems) {
         this.marbleshopItems = marbleshopItems;
-    }
-
-    public List<MiscellaneousItem> getMiscellaneousItems() {
-        return miscellaneousItems;
-    }
-
-    public void setMiscellaneousItems(List<MiscellaneousItem> miscellaneousItems) {
-        this.miscellaneousItems = miscellaneousItems;
     }
 
     public Marbleshop getMarbleshop() {

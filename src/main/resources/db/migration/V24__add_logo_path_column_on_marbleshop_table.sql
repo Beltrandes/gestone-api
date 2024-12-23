@@ -1,0 +1,1 @@
+ALTER TABLE marbleshop ADD COLUMN logo_path VARCHAR(150);

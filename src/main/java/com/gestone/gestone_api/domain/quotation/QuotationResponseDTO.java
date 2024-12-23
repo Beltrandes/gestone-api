@@ -1,10 +1,9 @@
 package com.gestone.gestone_api.domain.quotation;
 
 import com.gestone.gestone_api.domain.customer.CustomerListResponseDTO;
-import com.gestone.gestone_api.domain.marbleshop.MarbleshopResponseDTO;
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItemResponseDTO;
-import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
 import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItemResponseDTO;
+import com.gestone.gestone_api.domain.user.UserResponseDTO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -22,9 +21,9 @@ public class QuotationResponseDTO {
     BigDecimal totalArea;
     QuotationStatus quotationStatus;
     CustomerListResponseDTO customer;
+    UserResponseDTO user;
     List<MarbleshopItemResponseDTO> marbleshopItems;
     List<MiscellaneousItemResponseDTO> miscellaneousItems;
-    MarbleshopResponseDTO marbleshop;
     LocalDateTime createdAt;
 
     public QuotationResponseDTO(Quotation quotation) {
@@ -38,9 +37,9 @@ public class QuotationResponseDTO {
         this.totalArea = quotation.getTotalArea();
         this.quotationStatus = quotation.getQuotationStatus();
         this.customer = new CustomerListResponseDTO(quotation.getCustomer());
+        this.user = new UserResponseDTO(quotation.getUser());
         this.miscellaneousItems = quotation.getMiscellaneousItems().stream().map(MiscellaneousItemResponseDTO::new).toList();
         this.marbleshopItems = quotation.getMarbleshopItems().stream().map(MarbleshopItemResponseDTO::new).toList();
-        this.marbleshop = new MarbleshopResponseDTO(quotation.getMarbleshop());
         this.createdAt = quotation.getCreatedAt();
     }
 
@@ -136,12 +135,12 @@ public class QuotationResponseDTO {
         this.miscellaneousItems = miscellaneousItems;
     }
 
-    public MarbleshopResponseDTO getMarbleshop() {
-        return marbleshop;
+    public UserResponseDTO getUser() {
+        return user;
     }
 
-    public void setMarbleshop(MarbleshopResponseDTO marbleshop) {
-        this.marbleshop = marbleshop;
+    public void setUser(UserResponseDTO user) {
+        this.user = user;
     }
 
     public LocalDateTime getCreatedAt() {

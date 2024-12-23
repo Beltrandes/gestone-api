@@ -5,6 +5,7 @@ import com.gestone.gestone_api.domain.quotation.Quotation;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.UUID;
 
 import com.gestone.gestone_api.domain.material.MiscellaneousMaterial;
@@ -22,20 +23,22 @@ public class MiscellaneousItem {
     private MiscellaneousMaterial miscellaneousMaterial;
     @ManyToOne(fetch = FetchType.LAZY)
     private Quotation quotation;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private MarbleshopOrder marbleshopOrder;
 
     public MiscellaneousItem() {
     }
 
+    public void calculate() {
+        this.unitValue = this.miscellaneousMaterial.getPrice();
+        this.totalValue = this.unitValue.multiply(BigDecimal.valueOf(quantity));
+    }
+
     public MiscellaneousItem(String name, String details, Integer quantity, MiscellaneousMaterial miscellaneousMaterial,
-            Quotation quotation, MarbleshopOrder marbleshopOrder) {
+            Quotation quotation) {
         this.name = name;
         this.details = details;
         this.quantity = quantity;
         this.miscellaneousMaterial = miscellaneousMaterial;
         this.quotation = quotation;
-        this.marbleshopOrder = marbleshopOrder;
     }
 
     public UUID getId() {

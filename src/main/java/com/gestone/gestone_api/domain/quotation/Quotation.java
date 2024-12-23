@@ -4,6 +4,7 @@ import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
 import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
+import com.gestone.gestone_api.domain.user.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -26,14 +27,19 @@ public class Quotation {
     private BigDecimal totalValue = BigDecimal.ZERO;
     private BigDecimal totalArea = BigDecimal.ZERO;
     private QuotationStatus quotationStatus = QuotationStatus.PENDING;
+
+    @Column(nullable = false)
+    private Integer localId;
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
-    @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MarbleshopItem> marbleshopItems = new ArrayList<>();
-    @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "quotation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MiscellaneousItem> miscellaneousItems = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     private Marbleshop marbleshop;
+    @OneToOne
+    private User user;
     @CreationTimestamp
     private LocalDateTime createdAt;
 
@@ -59,8 +65,16 @@ public class Quotation {
     }
 
     public void calculate() {
-        this.totalValue = marbleshopItems.stream().map(MarbleshopItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add);
-        this.totalArea = marbleshopItems.stream().map(MarbleshopItem::getTotalArea).reduce(BigDecimal.ZERO, BigDecimal::add);
+        this.totalValue = marbleshopItems.stream()
+                .map(MarbleshopItem::getTotalValue)
+                .reduce(BigDecimal.ZERO, BigDecimal::add)
+                .add(miscellaneousItems.stream()
+                        .map(MiscellaneousItem::getTotalValue)
+                        .reduce(BigDecimal.ZERO, BigDecimal::add));
+
+        this.totalArea = marbleshopItems.stream()
+                .map(MarbleshopItem::getTotalArea)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
     public UUID getId() {
@@ -163,5 +177,27 @@ public class Quotation {
         this.marbleshop = marbleshop;
     }
 
+    public void setTotalValue(BigDecimal totalValue) {
+        this.totalValue = totalValue;
+    }
 
+    public void setTotalArea(BigDecimal totalArea) {
+        this.totalArea = totalArea;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Integer getLocalId() {
+        return localId;
+    }
+
+    public void setLocalId(Integer localId) {
+        this.localId = localId;
+    }
 }
