@@ -32,9 +32,9 @@ public class QuotationController {
     }
 
     @GetMapping("/pdf/{quotationId}")
-    public ResponseEntity<byte[]> generateQuotationPdf(@PathVariable UUID quotationId) throws IOException {
+    public ResponseEntity<byte[]> generateQuotationPdf(@PathVariable UUID quotationId) throws Exception {
         Quotation quotation = quotationService.findById(quotationId);
-        byte[] pdfContent = pdfService.generatePdf(quotation);
+        byte[] pdfContent = pdfService.generateQuotationPdf(quotation);
 
         return ResponseEntity.ok()
                 .header("Content-Disposition", "inline; filename=quotation_" + quotationId + ".pdf")

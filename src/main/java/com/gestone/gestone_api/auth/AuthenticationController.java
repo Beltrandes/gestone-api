@@ -43,7 +43,7 @@ public class AuthenticationController {
         var auth = authenticationManager.authenticate(usernamePassword);
         var token = tokenService.generateToken((User) auth.getPrincipal());
         var marbleshop = tokenService.getMarbleshopFromToken(token);
-        return ResponseEntity.ok(new LoginResponseDTO(token, marbleshop.getId()));
+        return ResponseEntity.ok(new LoginResponseDTO(token, marbleshop.getId(), data.email()));
     }
 
     @PostMapping("/register/admin")

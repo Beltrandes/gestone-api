@@ -32,7 +32,7 @@ public class MarbleshopMaterialController {
         return ResponseEntity.status(HttpStatus.CREATED).body(new MiscellaneousMaterialResponseDTO(savedMarbleshopMaterial));
     }
 
-    @GetMapping
+    @GetMapping("/marbleshop")
     public ResponseEntity<List<MarbleshopMaterialResponseDTO>> findAllMarbleshopMaterial(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);

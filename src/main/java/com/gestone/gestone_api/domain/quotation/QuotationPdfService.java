@@ -1,32 +1,34 @@
 package com.gestone.gestone_api.domain.quotation;
 
 import com.gestone.gestone_api.domain.marbleshop.MarbleshopService;
+
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
-import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.apache.pdfbox.pdmodel.font.Standard14Fonts;
-import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
-import org.apache.tomcat.util.http.fileupload.ByteArrayOutputStream;
+import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopSubItem;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.Style;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.properties.TextAlignment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
-import java.awt.*;
-import java.io.IOException;
-import java.text.NumberFormat;
+import java.io.ByteArrayOutputStream;
 import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
-import java.util.Locale;
+
 
 @Service
 public class QuotationPdfService {
     @Autowired
     private MarbleshopService marbleshopService;
-
+/*
     public byte[] generatePdf(Quotation quotation) throws IOException {
         try (PDDocument document = new PDDocument(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
             PDPage page = new PDPage();
@@ -220,6 +222,54 @@ public class QuotationPdfService {
                 yPosition -= cellHeight;
             }
         }
+    }*/
+public byte[] generateQuotationPdf(Quotation quotation) throws Exception {
+    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+    PdfWriter writer = new PdfWriter(baos);
+    PdfDocument pdfDoc = new PdfDocument(writer);
+    Document document = new Document(pdfDoc);
+
+    Resource imgResource = marbleshopService.getMarbleshopLogo(quotation.getMarbleshop().getId());
+    ImageData imageData = ImageDataFactory.create(imgResource.getContentAsByteArray());
+    Image logo = new Image(imageData);
+    logo.setWidth(100);
+    logo.setHeight(100);
+    logo.setFixedPosition(document.getLeftMargin(), 730);
+    document.add(logo).setBottomMargin(20);
+    document.add(new Paragraph("(11) 98953-5288").setFixedPosition(document.getLeftMargin() + logo.getImageWidth() + 5, 730 + logo.getImageHeight(), 100));
+    // Cabeçalho
+    document.add(new Paragraph("Orçamento Nº " + quotation.getLocalId()).setFontSize(20).setTextAlignment(TextAlignment.RIGHT));
+    document.add(new Paragraph( "Cliente: " + quotation.getCustomer().getName()).setMarginTop(40));
+    document.add(new Paragraph("Endereço: " + quotation.getAddress()));
+    document.add(new Paragraph("Data: " + quotation.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))));
+
+    // Tabela
+    Table table = new Table(new float[]{2, 2, 1, 1, 1, 1});
+    table.addHeaderCell("Item");
+    table.addHeaderCell("Detalhes");
+    table.addHeaderCell("Qtd");
+    table.addHeaderCell("Área (m²)");
+    table.addHeaderCell("Valor Un.");
+    table.addHeaderCell("Valor Total");
+
+    for (MarbleshopItem item : quotation.getMarbleshopItems()) {
+        table.addCell(item.getName() + " - " + String.format("%.2f", item.getMeasureX()) + " X " + String.format("%.2f", item.getMeasureY()) + " em " + item.getMarbleshopMaterial().getName());
+        table.addCell(item.getDescription());
+        table.addCell(String.valueOf(item.getQuantity()));
+        table.addCell(String.format("%.2f", item.getTotalArea()));
+        table.addCell(String.format("R$ %.2f", item.getUnitValue()));
+        table.addCell(String.format("R$ %.2f", item.getTotalValue()));
     }
+
+    document.add(table);
+
+    // Rodapé
+    document.add(new Paragraph("Valor Total: R$ " + String.format("%.2f", quotation.getTotalValue())).setFontSize(20).setFont(PdfFontFactory.createFont("Helvetica-Bold"))
+            .setTextAlignment(TextAlignment.RIGHT));
+
+    document.close();
+    return baos.toByteArray(); // Retorna o PDF como byte[]
+}
 }
 

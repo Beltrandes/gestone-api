@@ -1,14 +1,11 @@
 package com.gestone.gestone_api;
 
-import org.apache.pdfbox.pdmodel.PDDocument;
-import org.apache.pdfbox.pdmodel.PDPage;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
-import java.io.IOException;
 
 @SpringBootApplication
 public class GestoneApiApplication {

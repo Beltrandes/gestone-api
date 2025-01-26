@@ -34,7 +34,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/register/employee").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/marbleshop/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/marbleshop/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/quotation/pdf/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/quotation/pdf/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/user/admin").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/employee").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/material").hasRole("ADMIN")
@@ -47,6 +47,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v1/quotation").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/material/marbleshop").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/material/miscellaneous").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/material/marbleshop").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/material/miscellaneous").hasRole("ADMIN")
                         .anyRequest().authenticated()).csrf(AbstractHttpConfigurer::disable).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
