@@ -15,6 +15,7 @@ public record QuotationDTO(
         UUID customerId,
         String userEmail,
         List<MarbleshopItemDTO> marbleshopItems,
-        List<MiscellaneousItemDTO> miscellaneousItems
+        List<MiscellaneousItemDTO> miscellaneousItems,
+        String paymentCondition
 ) {
 }

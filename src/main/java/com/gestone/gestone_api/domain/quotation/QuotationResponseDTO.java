@@ -26,6 +26,8 @@ public class QuotationResponseDTO {
     List<MiscellaneousItemResponseDTO> miscellaneousItems;
     LocalDateTime createdAt;
 
+    String paymentCondition;
+
     public QuotationResponseDTO(Quotation quotation) {
         this.id = quotation.getId();
         this.name = quotation.getName();
@@ -41,6 +43,7 @@ public class QuotationResponseDTO {
         this.miscellaneousItems = quotation.getMiscellaneousItems().stream().map(MiscellaneousItemResponseDTO::new).toList();
         this.marbleshopItems = quotation.getMarbleshopItems().stream().map(MarbleshopItemResponseDTO::new).toList();
         this.createdAt = quotation.getCreatedAt();
+        this.paymentCondition = quotation.getPaymentCondition();
     }
 
     public UUID getId() {
@@ -149,5 +152,13 @@ public class QuotationResponseDTO {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getPaymentCondition() {
+        return paymentCondition;
+    }
+
+    public void setPaymentCondition(String paymentCondition) {
+        this.paymentCondition = paymentCondition;
     }
 }

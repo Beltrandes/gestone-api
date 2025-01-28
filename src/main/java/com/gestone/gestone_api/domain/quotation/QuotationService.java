@@ -60,6 +60,7 @@ public class QuotationService implements IQuotationService {
         quotation.setDaysForDue(quotationDTO.daysForDue());
         quotation.setCustomer(customer);
         quotation.setMarbleshop(marbleshop);
+        quotation.setPaymentCondition(quotationDTO.paymentCondition());
         List<MarbleshopItem> marbleshopItems = quotationDTO.marbleshopItems().stream().map(marbleshopItemDTO -> {
             MarbleshopMaterial marbleshopMaterial = marbleshopMaterialService.findById(marbleshopItemDTO.marbleshopMaterialId());
             MarbleshopItem marbleshopItem = new MarbleshopItem();

@@ -35,9 +35,10 @@ public class QuotationController {
     public ResponseEntity<byte[]> generateQuotationPdf(@PathVariable UUID quotationId) throws Exception {
         Quotation quotation = quotationService.findById(quotationId);
         byte[] pdfContent = pdfService.generateQuotationPdf(quotation);
-
+        String[] splittedId = quotation.getId().toString().split("-");
+        String shortId = splittedId[splittedId.length - 1];
         return ResponseEntity.ok()
-                .header("Content-Disposition", "inline; filename=quotation_" + quotationId + ".pdf")
+                .header("Content-Disposition", "attachment; filename=orcamento- " + shortId + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdfContent);
     }

@@ -43,16 +43,19 @@ public class Quotation {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    private String paymentCondition;
+
     public Quotation() {
     }
 
-    public Quotation(String name, String details, String address, Integer deadlineDays, Integer daysForDue, Customer customer) {
+    public Quotation(String name, String details, String address, Integer deadlineDays, Integer daysForDue, Customer customer, String paymentCondition) {
         this.name = name;
         this.details = details;
         this.address = address;
         this.deadlineDays = deadlineDays;
         this.daysForDue = daysForDue;
         this.customer = customer;
+        this.paymentCondition = paymentCondition;
     }
 
     public void checkDueDate() {
@@ -199,5 +202,13 @@ public class Quotation {
 
     public void setLocalId(Integer localId) {
         this.localId = localId;
+    }
+
+    public String getPaymentCondition() {
+        return paymentCondition;
+    }
+
+    public void setPaymentCondition(String paymentCondition) {
+        this.paymentCondition = paymentCondition;
     }
 }

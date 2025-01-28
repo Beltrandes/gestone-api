@@ -111,4 +111,36 @@ public class Marbleshop {
     public void setQuotations(List<Quotation> quotations) {
         this.quotations = quotations;
     }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
+    public void setEmployees(List<Employee> employees) {
+        this.employees = employees;
+    }
+
+    public List<Customer> getCustomers() {
+        return customers;
+    }
+
+    public void setCustomers(List<Customer> customers) {
+        this.customers = customers;
+    }
+
+    public void setMarbleshopMaterials(List<MarbleshopMaterial> marbleshopMaterials) {
+        this.marbleshopMaterials = marbleshopMaterials;
+    }
+
+    public List<MiscellaneousMaterial> getMiscellaneousMaterials() {
+        return miscellaneousMaterials;
+    }
+
+    public void setMiscellaneousMaterials(List<MiscellaneousMaterial> miscellaneousMaterials) {
+        this.miscellaneousMaterials = miscellaneousMaterials;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
