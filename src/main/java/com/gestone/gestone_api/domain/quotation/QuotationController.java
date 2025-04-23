@@ -1,5 +1,7 @@
 package com.gestone.gestone_api.domain.quotation;
 
+import com.gestone.gestone_api.domain.customer.CustomerService;
+import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +20,8 @@ public class QuotationController {
     @Autowired
     private QuotationService quotationService;
     @Autowired
+    private CustomerService customerService;
+    @Autowired
     private QuotationPdfService pdfService;
 
     @PostMapping
@@ -27,8 +31,14 @@ public class QuotationController {
     }
     @GetMapping("/{marbleshopId}")
     public ResponseEntity<List<QuotationResponseDTO>> findAll(@PathVariable UUID marbleshopId) {
-        var quotations = quotationService.findAll(marbleshopId).stream().map(quotation -> new QuotationResponseDTO(quotation)).toList();
+        var quotations = quotationService.findAll(marbleshopId).stream().map(QuotationResponseDTO::new).toList();
         return ResponseEntity.status(HttpStatus.OK).body(quotations);
+    }
+
+    @GetMapping("/id/{quotationId}")
+    public ResponseEntity<QuotationResponseDTO> findQuotationById(@PathVariable UUID quotationId) {
+        var quotation = quotationService.findById(quotationId);
+        return ResponseEntity.status(HttpStatus.OK).body(new QuotationResponseDTO(quotation));
     }
 
     @GetMapping("/pdf/{quotationId}")
@@ -41,6 +51,13 @@ public class QuotationController {
                 .header("Content-Disposition", "attachment; filename=orcamento- " + shortId + ".pdf")
                 .contentType(MediaType.APPLICATION_PDF)
                 .body(pdfContent);
+    }
+
+    @PutMapping("/{quotationId}")
+    public ResponseEntity<QuotationResponseDTO> updateQuotation(@PathVariable UUID quotationId, @RequestBody QuotationDTO quotationDTO) {
+       var quotation = this.quotationService.update(quotationId, quotationDTO);
+       return ResponseEntity.status(HttpStatus.OK).body(new QuotationResponseDTO(quotation));
+
     }
 
 }

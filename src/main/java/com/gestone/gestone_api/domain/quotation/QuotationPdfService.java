@@ -242,7 +242,7 @@ public class QuotationPdfService {
         addHeader(document, quotation);
         addQuotationInfos(document, quotation);
         float[] itemTableCols = {220f, 120f, 20f, 70f, 70f, 70f};
-        float[] miscellaneousTableCols = {250f, 160f, 20f, 70f, 70f};
+        float[] miscellaneousTableCols = {190f, 100f,120f, 20f, 70f, 70f};
         Table itemsTable = new Table(itemTableCols).useAllAvailableWidth();
         Table miscellaneousTable = new Table(miscellaneousTableCols).useAllAvailableWidth();
         Cell itemTableHeaderCell = new Cell(1, 6)
@@ -267,7 +267,7 @@ public class QuotationPdfService {
             itemsTable.addCell(currencyFormatter.format(item.getUnitValue()));
             itemsTable.addCell(currencyFormatter.format(item.getTotalValue()));
         }
-        Cell miscellaneousTableHeaderCell = new Cell(1, 5)
+        Cell miscellaneousTableHeaderCell = new Cell(1, 6)
                 .add(new Paragraph("Itens Diversos"))
                 .setBackgroundColor(ColorConstants.BLACK)
                 .setFontColor(ColorConstants.WHITE)
@@ -276,6 +276,7 @@ public class QuotationPdfService {
                 .simulateBold();
         miscellaneousTable.addHeaderCell(miscellaneousTableHeaderCell);
         miscellaneousTable.addCell("Item");
+        miscellaneousTable.addCell("Descrição");
         miscellaneousTable.addCell("Detalhes");
         miscellaneousTable.addCell("Qtde.");
         miscellaneousTable.addCell("Valor Un.");
@@ -283,6 +284,7 @@ public class QuotationPdfService {
         for (MiscellaneousItem item : quotation.getMiscellaneousItems()) {
             miscellaneousTable.addCell(item.getName());
             miscellaneousTable.addCell(item.getDetails());
+            miscellaneousTable.addCell(item.getMiscellaneousMaterial().getDetails());
             miscellaneousTable.addCell(String.valueOf(item.getQuantity())).setTextAlignment(TextAlignment.CENTER);
             miscellaneousTable.addCell(currencyFormatter.format(item.getUnitValue()));
             miscellaneousTable.addCell(currencyFormatter.format(item.getTotalValue()));

@@ -41,11 +41,11 @@ public class MarbleshopMaterialController {
     }
 
     @GetMapping("/miscellaneous")
-    public ResponseEntity<List<MiscellaneousResponseDTO>> findAllMiscellaneousMaterial(HttpServletRequest request) {
+    public ResponseEntity<List<MiscellaneousMaterialResponseDTO>> findAllMiscellaneousMaterial(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
         List<MiscellaneousMaterial> materials = marbleshop.getMiscellaneousMaterials();
-        return ResponseEntity.ok(materials.stream().map(MiscellaneousResponseDTO::new).toList());
+        return ResponseEntity.ok(materials.stream().map(MiscellaneousMaterialResponseDTO::new).toList());
     }
     @PatchMapping("/update/price")
     public ResponseEntity<MarbleshopMaterialResponseDTO> updatePrice(@RequestBody UpdateMaterialPriceDTO updateMaterialPriceDTO) {

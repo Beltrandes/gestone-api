@@ -40,6 +40,8 @@ public class MarbleshopItemResponseDTO {
         this.marbleshopSubItems = marbleshopItem.getMarbleshopSubItems().stream().map(MarbleshopSubItemResponseDTO::new).toList();
     }
 
+    public UUID getId() {return id;}
+
     public String getName() {
         return name;
     }

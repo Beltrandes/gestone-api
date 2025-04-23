@@ -45,6 +45,7 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v1/customer").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/quotation").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/quotation").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/quotation/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/material/marbleshop").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/material/miscellaneous").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/material/marbleshop").hasRole("ADMIN")

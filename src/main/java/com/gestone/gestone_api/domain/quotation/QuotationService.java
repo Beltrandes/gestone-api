@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -108,6 +109,74 @@ public class QuotationService implements IQuotationService {
         return quotationRepository.save(quotation);
 
     }
+
+    public Quotation update(UUID quotationId, QuotationDTO quotationDTO) {
+        var quotation = this.findById(quotationId);
+        var customer = this.customerService.findById(quotationDTO.customerId());
+        var user = this.userService.findByEmail(quotationDTO.userEmail());
+
+        quotation.setName(quotationDTO.name());
+        quotation.setUser(user);
+        quotation.setDetails(quotationDTO.details());
+        quotation.setAddress(quotationDTO.address());
+        quotation.setDeadlineDays(quotationDTO.deadlineDays());
+        quotation.setDaysForDue(quotationDTO.daysForDue());
+        quotation.setCustomer(customer);
+        quotation.setPaymentCondition(quotationDTO.paymentCondition());
+
+        // --- LIMPA ITENS EXISTENTES DE FORMA SEGURA ---
+        quotation.getMarbleshopItems().clear();
+        quotation.getMiscellaneousItems().clear();
+
+        // --- ADICIONA NOVOS MARBLESHOP ITEMS ---
+        for (var marbleshopItemDTO : quotationDTO.marbleshopItems()) {
+            MarbleshopMaterial marbleshopMaterial = marbleshopMaterialService.findById(marbleshopItemDTO.marbleshopMaterialId());
+            MarbleshopItem marbleshopItem = new MarbleshopItem();
+
+            marbleshopItem.setName(marbleshopItemDTO.name());
+            marbleshopItem.setDescription(marbleshopItemDTO.description());
+            marbleshopItem.setMeasureX(marbleshopItemDTO.measureX());
+            marbleshopItem.setMeasureY(marbleshopItemDTO.measureY());
+            marbleshopItem.setQuantity(marbleshopItemDTO.quantity());
+            marbleshopItem.setMarbleshopItemType(marbleshopItemDTO.marbleshopItemType());
+            marbleshopItem.setMarbleshopMaterial(marbleshopMaterial);
+            marbleshopItem.setQuotation(quotation);
+
+            List<MarbleshopSubItem> marbleshopSubItems = marbleshopItemDTO.marbleshopSubItems().stream().map(marbleshopSubItemDTO -> {
+                MarbleshopSubItem subItem = new MarbleshopSubItem();
+                subItem.setName(marbleshopSubItemDTO.name());
+                subItem.setDescription(marbleshopSubItemDTO.description());
+                subItem.setMeasureX(marbleshopSubItemDTO.measureX());
+                subItem.setMeasureY(marbleshopSubItemDTO.measureY());
+                subItem.setQuantity(marbleshopSubItemDTO.quantity());
+                subItem.setMarbleshopSubItemType(marbleshopSubItemDTO.marbleshopSubItemType());
+                subItem.setMarbleshopItem(marbleshopItem);
+                subItem.calculate();
+                return subItem;
+            }).toList();
+
+            marbleshopItem.setMarbleshopSubItems(new ArrayList<>(marbleshopSubItems));
+            marbleshopItem.calculate();
+            quotation.getMarbleshopItems().add(marbleshopItem);
+        }
+
+        for (var miscellaneousItemDTO : quotationDTO.miscellaneousItems()) {
+            MiscellaneousMaterial material = miscellaneousMaterialService.findById(miscellaneousItemDTO.miscellaneousMaterialId());
+            MiscellaneousItem item = new MiscellaneousItem();
+            item.setName(miscellaneousItemDTO.name());
+            item.setDetails(miscellaneousItemDTO.details());
+            item.setQuantity(miscellaneousItemDTO.quantity());
+            item.setMiscellaneousMaterial(material);
+            item.setQuotation(quotation);
+            item.calculate();
+            quotation.getMiscellaneousItems().add(item);
+        }
+
+        quotation.calculate();
+
+        return quotationRepository.save(quotation);
+    }
+
 
     public Quotation validateDueDate(Quotation quotation) {
         quotation.checkDueDate();
