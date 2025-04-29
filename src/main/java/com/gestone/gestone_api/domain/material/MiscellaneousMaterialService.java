@@ -31,7 +31,10 @@ public class MiscellaneousMaterialService implements IMiscellaneousMaterialServi
 
     @Override
     public MiscellaneousMaterial updatePrice(UpdateMaterialPriceDTO updateMaterialPriceDTO) {
-        return null;
+        MiscellaneousMaterial miscellaneousMaterial = findById(updateMaterialPriceDTO.materialId());
+        miscellaneousMaterial.setLastPrice(miscellaneousMaterial.getPrice());
+        miscellaneousMaterial.setPrice(updateMaterialPriceDTO.price());
+        return miscellaneousMaterialRepository.save(miscellaneousMaterial);
     }
 
     @Override
@@ -40,15 +43,24 @@ public class MiscellaneousMaterialService implements IMiscellaneousMaterialServi
     }
 
     @Override
-    public void deleteById(UUID id) {
-        MiscellaneousMaterial miscellaneousMaterial = findById(id);
-        miscellaneousMaterialRepository.delete(miscellaneousMaterial);
+    public MiscellaneousMaterial update(MiscellaneousMaterialDTO miscellaneousMaterialDTO, UUID miscellaneousMaterialId) {
+        MiscellaneousMaterial miscellaneousMaterial = findById(miscellaneousMaterialId);
+        miscellaneousMaterial.setName(miscellaneousMaterialDTO.name());
+        miscellaneousMaterial.setDetails(miscellaneousMaterialDTO.details());
+        miscellaneousMaterial.setLastPrice(miscellaneousMaterial.getPrice());
+        miscellaneousMaterial.setPrice(miscellaneousMaterialDTO.price());
+        miscellaneousMaterial.setMiscellaneousMaterialType(miscellaneousMaterialDTO.miscellaneousMaterialType());
+        return miscellaneousMaterialRepository.save(miscellaneousMaterial);
     }
-
-
 
     @Override
     public List<MiscellaneousMaterial> findAll(HttpServletRequest request) {
         return null;
+    }
+
+    @Override
+    public void delete(UUID miscellaneousMaterialId) {
+        var miscellaneousMaterial = findById(miscellaneousMaterialId);
+        miscellaneousMaterialRepository.delete(miscellaneousMaterial);
     }
 }

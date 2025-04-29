@@ -46,10 +46,16 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/quotation").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/quotation").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/quotation/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/material/marbleshop").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/material/miscellaneous").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/material/marbleshop").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET, "/api/v1/material/miscellaneous").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/material").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/material").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/material").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/material").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/material/update/price").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/miscellaneous-material").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/miscellaneous-material").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/miscellaneous-material").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/miscellaneous-material").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/miscellaneous-material/update/price").hasRole("ADMIN")
                         .anyRequest().authenticated()).csrf(AbstractHttpConfigurer::disable).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
@@ -57,7 +63,7 @@ public class SecurityConfiguration {
     public UrlBasedCorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of("http://localhost:4200"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         configuration.setExposedHeaders(List.of("Authorization"));
         configuration.setAllowCredentials(true);

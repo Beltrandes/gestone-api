@@ -12,4 +12,9 @@ public interface IMarbleshopMaterialService {
     MarbleshopMaterial findById(UUID id);
 
     List<MarbleshopMaterial> findAll(HttpServletRequest request);
+
+    MarbleshopMaterial update(MarbleshopMaterialDTO marbleshopMaterialDTO, UUID marbleshopMaterialId);
+
+    void delete(UUID marbleshopMaterialId);
+
 }

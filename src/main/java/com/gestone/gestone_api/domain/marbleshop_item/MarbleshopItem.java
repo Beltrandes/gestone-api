@@ -20,7 +20,7 @@ public class MarbleshopItem {
     private BigDecimal measureX = BigDecimal.ZERO;
     private BigDecimal measureY = BigDecimal.ZERO;
     private Integer quantity;
-    @OneToOne
+    @OneToOne(orphanRemoval = true)
     private MarbleshopMaterial marbleshopMaterial;
     private BigDecimal unitValue = BigDecimal.ZERO;
     private BigDecimal unitArea = BigDecimal.ZERO;

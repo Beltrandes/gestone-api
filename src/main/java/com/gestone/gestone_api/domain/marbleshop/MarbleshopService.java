@@ -40,8 +40,7 @@ public class MarbleshopService {
     public Resource getMarbleshopLogo(UUID marbleshopId) throws MalformedURLException {
         Marbleshop marbleshop = findMarbleshopById(marbleshopId);
         Path filePath = Paths.get(marbleshop.getLogoPath());
-        Resource resource = new UrlResource(filePath.toUri());
-        return resource;
+        return new UrlResource(filePath.toUri());
     }
 
     public Marbleshop findMarbleshopById(UUID id) {

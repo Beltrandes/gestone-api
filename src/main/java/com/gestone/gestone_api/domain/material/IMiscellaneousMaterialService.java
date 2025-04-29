@@ -8,10 +8,13 @@ import java.util.UUID;
 public interface IMiscellaneousMaterialService {
     MiscellaneousMaterial save(MiscellaneousMaterialDTO miscellaneousMaterialDTO, HttpServletRequest request);
 
-    void deleteById(UUID id);
     MiscellaneousMaterial updatePrice(UpdateMaterialPriceDTO updateMaterialPriceDTO);
 
     MiscellaneousMaterial findById(UUID id);
 
     List<MiscellaneousMaterial> findAll(HttpServletRequest request);
+
+    MiscellaneousMaterial update(MiscellaneousMaterialDTO miscellaneousMaterialDTO, UUID miscellaneousMaterialId);
+
+    void delete(UUID miscellaneousMaterialId);
 }

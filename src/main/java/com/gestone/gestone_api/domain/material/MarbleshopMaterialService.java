@@ -42,12 +42,28 @@ public class MarbleshopMaterialService implements IMarbleshopMaterialService {
         Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
         return marbleshop.getMarbleshopMaterials();
     }
+    @Override
+    public MarbleshopMaterial update(MarbleshopMaterialDTO marbleshopMaterialDTO, UUID marbleshopMaterialId) {
+        MarbleshopMaterial marbleshopMaterial = findById(marbleshopMaterialId);
+        marbleshopMaterial.setName(marbleshopMaterialDTO.name());
+        marbleshopMaterial.setDetails(marbleshopMaterialDTO.details());
+        marbleshopMaterial.setLastPrice(marbleshopMaterial.getPrice());
+        marbleshopMaterial.setPrice(marbleshopMaterialDTO.price());
+        marbleshopMaterial.setMaterialType(marbleshopMaterialDTO.marbleshopMaterialType());
+        return marbleshopMaterialRepository.save(marbleshopMaterial);
+    }
 
     public MarbleshopMaterial updatePrice(UpdateMaterialPriceDTO updateMaterialPriceDTO) {
         MarbleshopMaterial marbleshopMaterial = findById(updateMaterialPriceDTO.materialId());
         marbleshopMaterial.setLastPrice(marbleshopMaterial.getPrice());
         marbleshopMaterial.setPrice(updateMaterialPriceDTO.price());
         return marbleshopMaterialRepository.save(marbleshopMaterial);
+    }
+
+    @Override
+    public void delete(UUID marbleshopMaterialId) {
+        var marbleshopMaterial = findById(marbleshopMaterialId);
+        marbleshopMaterialRepository.delete(marbleshopMaterial);
     }
 
 }

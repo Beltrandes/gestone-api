@@ -9,30 +9,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("api/v1/material")
 public class MarbleshopMaterialController {
     @Autowired
     private MarbleshopMaterialService marbleshopMaterialService;
-    @Autowired
-    private MiscellaneousMaterialService miscellaneousMaterialService;
+
     @Autowired
     private TokenService tokenService;
 
-    @PostMapping("/marbleshop")
+    @PostMapping
     public ResponseEntity<MarbleshopMaterialResponseDTO> saveMarbleshopMaterial(@RequestBody MarbleshopMaterialDTO marbleshopMaterialDTO, HttpServletRequest request) {
         var savedMarbleshopMaterial = marbleshopMaterialService.save(marbleshopMaterialDTO, request);
         return ResponseEntity.status(HttpStatus.CREATED).body(new MarbleshopMaterialResponseDTO(savedMarbleshopMaterial));
     }
 
-    @PostMapping("/miscellaneous")
-    public ResponseEntity<MiscellaneousMaterialResponseDTO> saveMiscellaneousMaterial(@RequestBody MiscellaneousMaterialDTO miscellaneousMaterialDTO, HttpServletRequest request) {
-        var savedMarbleshopMaterial = miscellaneousMaterialService.save(miscellaneousMaterialDTO, request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(new MiscellaneousMaterialResponseDTO(savedMarbleshopMaterial));
-    }
-
-    @GetMapping("/marbleshop")
+    @GetMapping
     public ResponseEntity<List<MarbleshopMaterialResponseDTO>> findAllMarbleshopMaterial(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
@@ -40,16 +34,21 @@ public class MarbleshopMaterialController {
         return ResponseEntity.ok(materials.stream().map(MarbleshopMaterialResponseDTO::new).toList());
     }
 
-    @GetMapping("/miscellaneous")
-    public ResponseEntity<List<MiscellaneousMaterialResponseDTO>> findAllMiscellaneousMaterial(HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
-        List<MiscellaneousMaterial> materials = marbleshop.getMiscellaneousMaterials();
-        return ResponseEntity.ok(materials.stream().map(MiscellaneousMaterialResponseDTO::new).toList());
+    @PutMapping("/{marbleshopMaterialId}")
+    public ResponseEntity<MarbleshopMaterialResponseDTO> updateMarbleshopMaterial(@RequestBody MarbleshopMaterialDTO marbleshopMaterialDTO, @PathVariable UUID marbleshopMaterialId) {
+        var updatedMaterial = marbleshopMaterialService.update(marbleshopMaterialDTO,marbleshopMaterialId);
+        return ResponseEntity.status(HttpStatus.OK).body(new MarbleshopMaterialResponseDTO(updatedMaterial));
     }
+
     @PatchMapping("/update/price")
     public ResponseEntity<MarbleshopMaterialResponseDTO> updatePrice(@RequestBody UpdateMaterialPriceDTO updateMaterialPriceDTO) {
         var updatedMaterial = marbleshopMaterialService.updatePrice(updateMaterialPriceDTO);
         return ResponseEntity.ok(new MarbleshopMaterialResponseDTO(updatedMaterial));
+    }
+
+    @DeleteMapping("/{marbleshopMaterialId}")
+    public ResponseEntity<Void> delete(@PathVariable UUID marbleshopMaterialId) {
+        marbleshopMaterialService.delete(marbleshopMaterialId);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
