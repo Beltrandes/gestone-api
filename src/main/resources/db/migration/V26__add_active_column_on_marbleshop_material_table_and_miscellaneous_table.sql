@@ -1,0 +1,3 @@
+ALTER TABLE marbleshop_material ADD COLUMN active BOOLEAN DEFAULT TRUE;
+
+ALTER TABLE miscellaneous_material ADD COLUMN active BOOLEAN DEFAULT TRUE;

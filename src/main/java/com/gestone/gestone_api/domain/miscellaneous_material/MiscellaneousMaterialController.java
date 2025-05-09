@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.domain.material;
+package com.gestone.gestone_api.domain.miscellaneous_material;
 
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.infra.security.TokenService;

@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.domain.material;
+package com.gestone.gestone_api.domain.marbleshop_material;
 
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import jakarta.persistence.*;
@@ -9,34 +9,37 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-public class MiscellaneousMaterial {
+public class MarbleshopMaterial {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String name;
     private String details;
-    private BigDecimal price = BigDecimal.ZERO;
+    private BigDecimal price;
     private BigDecimal lastPrice = BigDecimal.ZERO;
-    @Enumerated(value = EnumType.STRING)
-    private MiscellaneousMaterialType miscellaneousMaterialType;
+    private MarbleshopMaterialType marbleshopMaterialType;
+
+    private boolean active = true;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @ManyToOne(fetch = FetchType.LAZY)
     private Marbleshop marbleshop;
 
-    public MiscellaneousMaterial() {
+    public MarbleshopMaterial() {
     }
 
-    public MiscellaneousMaterial(String name, String details, BigDecimal price, MiscellaneousMaterialType miscellaneousMaterialType) {
+    public MarbleshopMaterial(String name, String details, BigDecimal price, MarbleshopMaterialType marbleshopMaterialType, Marbleshop marbleshop) {
         this.name = name;
         this.details = details;
         this.price = price;
-        this.miscellaneousMaterialType = miscellaneousMaterialType;
+        this.marbleshopMaterialType = marbleshopMaterialType;
+        this.marbleshop = marbleshop;
     }
 
     public UUID getId() {
         return id;
     }
+
 
     public String getName() {
         return name;
@@ -70,14 +73,13 @@ public class MiscellaneousMaterial {
         this.lastPrice = lastPrice;
     }
 
-    public MiscellaneousMaterialType getMiscellaneousMaterialType() {
-        return miscellaneousMaterialType;
+    public MarbleshopMaterialType getMaterialType() {
+        return marbleshopMaterialType;
     }
 
-    public void setMiscellaneousMaterialType(MiscellaneousMaterialType miscellaneousMaterialType) {
-        this.miscellaneousMaterialType = miscellaneousMaterialType;
+    public void setMaterialType(MarbleshopMaterialType marbleshopMaterialType) {
+        this.marbleshopMaterialType = marbleshopMaterialType;
     }
-
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -91,4 +93,23 @@ public class MiscellaneousMaterial {
         this.marbleshop = marbleshop;
     }
 
+    public MarbleshopMaterialType getMarbleshopMaterialType() {
+        return marbleshopMaterialType;
+    }
+
+    public void setMarbleshopMaterialType(MarbleshopMaterialType marbleshopMaterialType) {
+        this.marbleshopMaterialType = marbleshopMaterialType;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

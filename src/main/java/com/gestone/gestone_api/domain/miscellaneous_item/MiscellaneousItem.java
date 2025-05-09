@@ -5,10 +5,9 @@ import com.gestone.gestone_api.domain.quotation.Quotation;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.UUID;
 
-import com.gestone.gestone_api.domain.material.MiscellaneousMaterial;
+import com.gestone.gestone_api.domain.miscellaneous_material.MiscellaneousMaterial;
 @Entity
 public class MiscellaneousItem {
     @Id
@@ -23,6 +22,9 @@ public class MiscellaneousItem {
     private MiscellaneousMaterial miscellaneousMaterial;
     @ManyToOne(fetch = FetchType.LAZY)
     private Quotation quotation;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private MarbleshopOrder marbleshopOrder;
 
     public MiscellaneousItem() {
     }

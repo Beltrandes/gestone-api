@@ -1,0 +1,13 @@
+ALTER TABLE marbleshop_order
+ADD COLUMN local_id INT NOT NULL,
+ADD COLUMN work_address VARCHAR(255),
+ADD COLUMN discount INT,
+ADD COLUMN final_value NUMERIC(10, 2),
+ADD COLUMN marbleshop_order_status SMALLINT,
+ADD COLUMN estimated_installment_date TIMESTAMP WITHOUT TIME ZONE,
+ADD COLUMN installment_date TIMESTAMP WITHOUT TIME ZONE,
+ADD COLUMN notes TEXT,
+ADD COLUMN payment_status SMALLINT,
+ADD COLUMN updated_at TIMESTAMP WITHOUT TIME ZONE;
+
+ALTER TABLE marbleshop_order ADD CONSTRAINT UNIQUE_LOCAL_ID_PER_MARBLESHOP_ON_MARBLESHOP_ORDER UNIQUE (marbleshop_id, local_id);

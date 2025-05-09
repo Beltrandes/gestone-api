@@ -329,7 +329,7 @@ public class QuotationPdfService {
         Table table = new Table(threeColumWidth);
 
         table.addCell(new Cell().add(logo).setBorder(Border.NO_BORDER));
-        table.addCell(new Cell().add(new Paragraph("VIDMAR Vidros e Mármores").setFontSize(15f).simulateBold()).add(new Paragraph("(11) 9 8953-5288").setFontSize(10f)).add(new Paragraph("(11) 98475-2473").setFontSize(10f)).add(new Paragraph("marmorariavidmar.com.br").setFontSize(10f)).add(new Paragraph("vidmarserv@outlook.com").setFontSize(10f)).add(new Paragraph("Av. Conde Francisco Matarazzo, 679").setFontSize(10f)).setBorder(Border.NO_BORDER));
+        table.addCell(new Cell().add(new Paragraph("VIDMAR Vidros e Mármores").setFontSize(15f).simulateBold()).add(new Paragraph("(11) 98953-5288").setFontSize(10f)).add(new Paragraph("(11) 98475-2473").setFontSize(10f)).add(new Paragraph("marmorariavidmar.com.br").setFontSize(10f)).add(new Paragraph("vidmarserv@outlook.com").setFontSize(10f)).add(new Paragraph("Av. Conde Francisco Matarazzo, 679").setFontSize(10f)).setBorder(Border.NO_BORDER));
         table.addCell(new Cell().add(new Paragraph("Orçamento Nº " + quotation.getLocalId()).setFontSize(20f).simulateBold()).add(new Paragraph("Data: " + quotation.getCreatedAt().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))).add(new Paragraph("Validade: " + quotation.getCreatedAt().plusDays(quotation.getDaysForDue()).format(DateTimeFormatter.ofPattern("dd/MM/yyyy")))).setTextAlignment(TextAlignment.RIGHT).setBorder(Border.NO_BORDER));
         table.setMarginBottom(10f);
         document.add(table);

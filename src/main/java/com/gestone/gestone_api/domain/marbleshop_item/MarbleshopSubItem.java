@@ -1,6 +1,5 @@
 package com.gestone.gestone_api.domain.marbleshop_item;
 
-import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -25,7 +24,7 @@ public class MarbleshopSubItem {
     private BigDecimal totalArea = BigDecimal.ZERO;
     @Enumerated(value = EnumType.STRING)
     private MarbleshopSubItemType marbleshopSubItemType;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private MarbleshopItem marbleshopItem;
 
     @CreationTimestamp

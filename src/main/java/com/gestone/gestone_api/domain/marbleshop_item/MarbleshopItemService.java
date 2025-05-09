@@ -1,7 +1,7 @@
 package com.gestone.gestone_api.domain.marbleshop_item;
 
-import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
-import com.gestone.gestone_api.domain.material.MarbleshopMaterialService;
+import com.gestone.gestone_api.domain.marbleshop_material.MarbleshopMaterial;
+import com.gestone.gestone_api.domain.marbleshop_material.MarbleshopMaterialService;
 import com.gestone.gestone_api.domain.quotation.Quotation;
 import com.gestone.gestone_api.domain.quotation.QuotationService;
 import com.gestone.gestone_api.infra.security.TokenService;

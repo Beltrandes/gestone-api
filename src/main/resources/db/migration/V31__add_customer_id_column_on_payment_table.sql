@@ -1,0 +1,3 @@
+ALTER TABLE payment ADD COLUMN customer_id UUID;
+
+ALTER TABLE payment ADD CONSTRAINT FK_CUSTOMER_ON_PAYMENT FOREIGN KEY (customer_id) REFERENCES customer (id);

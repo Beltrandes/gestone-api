@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.domain.material;
+package com.gestone.gestone_api.domain.miscellaneous_material;
 
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.infra.security.TokenService;
@@ -55,12 +55,15 @@ public class MiscellaneousMaterialService implements IMiscellaneousMaterialServi
 
     @Override
     public List<MiscellaneousMaterial> findAll(HttpServletRequest request) {
-        return null;
+        String token = request.getHeader("Authorization");
+        Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
+        return miscellaneousMaterialRepository.findByMarbleshop_IdAndActiveTrue(marbleshop.getId());
     }
 
     @Override
     public void delete(UUID miscellaneousMaterialId) {
         var miscellaneousMaterial = findById(miscellaneousMaterialId);
-        miscellaneousMaterialRepository.delete(miscellaneousMaterial);
+        miscellaneousMaterial.setActive(false);
+        miscellaneousMaterialRepository.save(miscellaneousMaterial);
     }
 }

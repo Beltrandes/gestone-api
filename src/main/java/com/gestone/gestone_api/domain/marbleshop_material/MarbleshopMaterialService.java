@@ -1,6 +1,7 @@
-package com.gestone.gestone_api.domain.material;
+package com.gestone.gestone_api.domain.marbleshop_material;
 
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
+import com.gestone.gestone_api.domain.miscellaneous_material.UpdateMaterialPriceDTO;
 import com.gestone.gestone_api.infra.security.TokenService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +41,7 @@ public class MarbleshopMaterialService implements IMarbleshopMaterialService {
     public List<MarbleshopMaterial> findAll(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         Marbleshop marbleshop = tokenService.getMarbleshopFromToken(token);
-        return marbleshop.getMarbleshopMaterials();
+        return marbleshopMaterialRepository.findByMarbleshop_IdAndActiveTrue(marbleshop.getId());
     }
     @Override
     public MarbleshopMaterial update(MarbleshopMaterialDTO marbleshopMaterialDTO, UUID marbleshopMaterialId) {
@@ -63,7 +64,8 @@ public class MarbleshopMaterialService implements IMarbleshopMaterialService {
     @Override
     public void delete(UUID marbleshopMaterialId) {
         var marbleshopMaterial = findById(marbleshopMaterialId);
-        marbleshopMaterialRepository.delete(marbleshopMaterial);
+        marbleshopMaterial.setActive(false);
+        marbleshopMaterialRepository.save(marbleshopMaterial);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.domain.material;
+package com.gestone.gestone_api.domain.marbleshop_material;
 
 import jakarta.servlet.http.HttpServletRequest;
 

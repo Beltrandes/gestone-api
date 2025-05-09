@@ -128,8 +128,16 @@ public class Quotation {
         return totalValue;
     }
 
+    public void setTotalValue(BigDecimal totalValue) {
+        this.totalValue = totalValue;
+    }
+
     public BigDecimal getTotalArea() {
         return totalArea;
+    }
+
+    public void setTotalArea(BigDecimal totalArea) {
+        this.totalArea = totalArea;
     }
 
     public QuotationStatus getQuotationStatus() {
@@ -178,14 +186,6 @@ public class Quotation {
 
     public void setMarbleshop(Marbleshop marbleshop) {
         this.marbleshop = marbleshop;
-    }
-
-    public void setTotalValue(BigDecimal totalValue) {
-        this.totalValue = totalValue;
-    }
-
-    public void setTotalArea(BigDecimal totalArea) {
-        this.totalArea = totalArea;
     }
 
     public User getUser() {

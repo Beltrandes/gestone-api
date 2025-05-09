@@ -1,12 +1,18 @@
 package com.gestone.gestone_api.domain.order;
 
+import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
-import com.gestone.gestone_api.domain.payment.Payment;
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
 import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
+import com.gestone.gestone_api.domain.payment.Payment;
+import com.gestone.gestone_api.domain.payment.PaymentStatus;
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -17,27 +23,58 @@ public class MarbleshopOrder {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
 
+    private Integer localId;
+    private String workAddress;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Customer customer;
     private BigDecimal totalValue = BigDecimal.ZERO;
     private BigDecimal totalArea = BigDecimal.ZERO;
-    private MarbleshopOrderStatus marbleshopOrderStatus = MarbleshopOrderStatus.PENDING;
+
+    private Integer discount;
+    @Column(precision = 10, scale = 2)
+    private BigDecimal finalValue = BigDecimal.ZERO;
+    @Enumerated(EnumType.STRING)
+    private MarbleshopOrderStatus marbleshopOrderStatus = MarbleshopOrderStatus.PROJECTING;
     @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL)
     private List<MarbleshopItem> marbleshopItems = new ArrayList<>();
+    @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL)
+    private List<MiscellaneousItem> miscellaneousItems = new ArrayList<>();
     @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL)
     private List<Payment> payments = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     private Marbleshop marbleshop;
 
+    private LocalDateTime estimatedInstallmentDate;
+
+    private LocalDateTime installmentDate;
+
+    private String notes;
+
+    private PaymentStatus paymentStatus;
+    @CreationTimestamp
+    private LocalDateTime createdAt;
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
+
     public MarbleshopOrder() {
     }
 
     public void calculate() {
-        this.totalValue = marbleshopItems.stream().map(MarbleshopItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add);
-        this.totalArea = marbleshopItems.stream().map(MarbleshopItem::getTotalArea).reduce(BigDecimal.ZERO, BigDecimal::add);
+        var marbleshopItemsTotalValue = getMarbleshopItems().stream().map(MarbleshopItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        var miscellaneousItemsTotalValue = getMiscellaneousItems().stream().map(MiscellaneousItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.totalValue = marbleshopItemsTotalValue.add(miscellaneousItemsTotalValue);
+        this.totalArea = getMarbleshopItems().stream().map(MarbleshopItem::getTotalArea).reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        this.finalValue = totalValue.multiply(BigDecimal.valueOf(1 - (discount / 100.0))).setScale(2, RoundingMode.HALF_UP);
+
     }
 
     public UUID getId() {
         return id;
     }
+
     public BigDecimal getTotalValue() {
         return totalValue;
     }
@@ -76,5 +113,117 @@ public class MarbleshopOrder {
 
     public void setMarbleshop(Marbleshop marbleshop) {
         this.marbleshop = marbleshop;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public MarbleshopOrderStatus getMarbleshopOrderStatus() {
+        return marbleshopOrderStatus;
+    }
+
+    public void setMarbleshopOrderStatus(MarbleshopOrderStatus marbleshopOrderStatus) {
+        this.marbleshopOrderStatus = marbleshopOrderStatus;
+    }
+
+    public List<Payment> getPayments() {
+        return payments;
+    }
+
+    public void setPayments(List<Payment> payments) {
+        this.payments = payments;
+    }
+
+    public Integer getLocalId() {
+        return localId;
+    }
+
+    public void setLocalId(Integer localId) {
+        this.localId = localId;
+    }
+
+    public String getWorkAddress() {
+        return workAddress;
+    }
+
+    public void setWorkAddress(String workAddress) {
+        this.workAddress = workAddress;
+    }
+
+    public Integer getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Integer discount) {
+        this.discount = discount;
+    }
+
+    public BigDecimal getFinalValue() {
+        return finalValue;
+    }
+
+    public void setFinalValue(BigDecimal finalValue) {
+        this.finalValue = finalValue;
+    }
+
+    public LocalDateTime getEstimatedInstallmentDate() {
+        return estimatedInstallmentDate;
+    }
+
+    public void setEstimatedInstallmentDate(LocalDateTime estimatedInstallmentDate) {
+        this.estimatedInstallmentDate = estimatedInstallmentDate;
+    }
+
+    public LocalDateTime getInstallmentDate() {
+        return installmentDate;
+    }
+
+    public void setInstallmentDate(LocalDateTime installmentDate) {
+        this.installmentDate = installmentDate;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
+    }
+
+    public PaymentStatus getPaymentStatus() {
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public List<MiscellaneousItem> getMiscellaneousItems() {
+        return miscellaneousItems;
+    }
+
+    public void setMiscellaneousItems(List<MiscellaneousItem> miscellaneousItems) {
+        this.miscellaneousItems = miscellaneousItems;
     }
 }

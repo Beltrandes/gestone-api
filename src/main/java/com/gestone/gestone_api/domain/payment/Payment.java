@@ -1,5 +1,6 @@
 package com.gestone.gestone_api.domain.payment;
 
+import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.order.MarbleshopOrder;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -13,6 +14,8 @@ public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Customer customer;
     private String details;
     private BigDecimal totalValue = BigDecimal.ZERO;
     private BigDecimal payedValue = BigDecimal.ZERO;
@@ -85,5 +88,13 @@ public class Payment {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 }

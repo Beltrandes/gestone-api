@@ -1,7 +1,6 @@
 package com.gestone.gestone_api.domain.marbleshop_item;
 
-import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
-import com.gestone.gestone_api.domain.material.MarbleshopMaterialResponseDTO;
+import com.gestone.gestone_api.domain.marbleshop_material.MarbleshopMaterialResponseDTO;
 
 import java.math.BigDecimal;
 import java.util.List;

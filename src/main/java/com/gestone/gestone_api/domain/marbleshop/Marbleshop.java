@@ -2,8 +2,8 @@ package com.gestone.gestone_api.domain.marbleshop;
 
 import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.employee.Employee;
-import com.gestone.gestone_api.domain.material.MarbleshopMaterial;
-import com.gestone.gestone_api.domain.material.MiscellaneousMaterial;
+import com.gestone.gestone_api.domain.marbleshop_material.MarbleshopMaterial;
+import com.gestone.gestone_api.domain.miscellaneous_material.MiscellaneousMaterial;
 import com.gestone.gestone_api.domain.quotation.Quotation;
 import com.gestone.gestone_api.domain.user.User;
 import jakarta.persistence.*;

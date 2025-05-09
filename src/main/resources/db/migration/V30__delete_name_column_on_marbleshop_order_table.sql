@@ -1,0 +1,1 @@
+ALTER TABLE marbleshop_order DROP COLUMN name;

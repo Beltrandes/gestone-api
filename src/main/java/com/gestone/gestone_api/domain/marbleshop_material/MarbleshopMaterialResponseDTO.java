@@ -1,4 +1,4 @@
-package com.gestone.gestone_api.domain.material;
+package com.gestone.gestone_api.domain.marbleshop_material;
 
 import java.math.BigDecimal;
 import java.util.UUID;
