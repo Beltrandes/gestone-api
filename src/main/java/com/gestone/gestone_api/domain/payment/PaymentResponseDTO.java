@@ -8,9 +8,7 @@ public record PaymentResponseDTO(
         UUID id,
         String customerName,
         String details,
-        BigDecimal totalValue,
         BigDecimal payedValue,
-        BigDecimal balanceValue,
         PaymentType paymentType,
         UUID marbleshopOrderId,
         LocalDateTime createdAt
@@ -20,9 +18,7 @@ public record PaymentResponseDTO(
                 payment.getId(),
                 payment.getCustomer().getName(),
                 payment.getDetails(),
-                payment.getTotalValue(),
                 payment.getPayedValue(),
-                payment.getBalanceValue(),
                 payment.getPaymentType(),
                 payment.getMarbleshopOrder().getId(),
                 payment.getCreatedAt()

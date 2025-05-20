@@ -17,12 +17,10 @@ public class Payment {
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
     private String details;
-    private BigDecimal totalValue = BigDecimal.ZERO;
     private BigDecimal payedValue = BigDecimal.ZERO;
-    private BigDecimal balanceValue = BigDecimal.ZERO;
     @Enumerated(value = EnumType.STRING)
     private PaymentType paymentType;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
     private MarbleshopOrder marbleshopOrder;
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -42,13 +40,6 @@ public class Payment {
         this.details = details;
     }
 
-    public BigDecimal getTotalValue() {
-        return totalValue;
-    }
-
-    public void setTotalValue(BigDecimal totalValue) {
-        this.totalValue = totalValue;
-    }
 
     public BigDecimal getPayedValue() {
         return payedValue;
@@ -58,13 +49,6 @@ public class Payment {
         this.payedValue = payedValue;
     }
 
-    public BigDecimal getBalanceValue() {
-        return balanceValue;
-    }
-
-    public void setBalanceValue(BigDecimal balanceValue) {
-        this.balanceValue = balanceValue;
-    }
 
     public PaymentType getPaymentType() {
         return paymentType;

@@ -4,6 +4,7 @@ import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.employee.Employee;
 import com.gestone.gestone_api.domain.marbleshop_material.MarbleshopMaterial;
 import com.gestone.gestone_api.domain.miscellaneous_material.MiscellaneousMaterial;
+import com.gestone.gestone_api.domain.order.MarbleshopOrder;
 import com.gestone.gestone_api.domain.quotation.Quotation;
 import com.gestone.gestone_api.domain.user.User;
 import jakarta.persistence.*;
@@ -34,6 +35,9 @@ public class Marbleshop {
     private List<MiscellaneousMaterial> miscellaneousMaterials = new ArrayList<>();
     @OneToMany(mappedBy = "marbleshop")
     private List<Quotation> quotations = new ArrayList<>();
+
+    @OneToMany(mappedBy = "marbleshop")
+    private List<MarbleshopOrder> orders = new ArrayList<>();
 
     private String logoPath;
     @CreationTimestamp
@@ -142,5 +146,13 @@ public class Marbleshop {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public List<MarbleshopOrder> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<MarbleshopOrder> orders) {
+        this.orders = orders;
     }
 }

@@ -1,0 +1,1 @@
+ALTER TABLE marbleshop_order ALTER COLUMN payment_status TYPE VARCHAR(30);

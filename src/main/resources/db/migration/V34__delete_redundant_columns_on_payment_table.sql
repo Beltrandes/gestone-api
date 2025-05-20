@@ -1,0 +1,1 @@
+ALTER TABLE payment DROP COLUMN balance_value, DROP COLUMN total_value;

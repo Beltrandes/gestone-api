@@ -1,0 +1,1 @@
+ALTER TABLE marbleshop_order ADD COLUMN total_paid NUMERIC(10,2);

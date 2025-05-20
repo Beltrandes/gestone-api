@@ -1,11 +1,12 @@
 package com.gestone.gestone_api.domain.payment;
 
 import com.gestone.gestone_api.domain.customer.CustomerService;
+import com.gestone.gestone_api.domain.order.MarbleshopOrder;
 import com.gestone.gestone_api.domain.order.MarbleshopOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
+import java.math.BigDecimal;
 
 @Service
 public class PaymentService {
@@ -18,10 +19,14 @@ public class PaymentService {
 
     public Payment save(PaymentDTO paymentDTO) {
         Payment payment = new Payment();
-        payment.setCustomer(customerService.findById(paymentDTO.customerId()));
+        MarbleshopOrder order = marbleshopOrderService.findById(paymentDTO.marbleshopOrderId());
+        payment.setCustomer(order.getCustomer());
         payment.setDetails(paymentDTO.details());
-        if (paymentDTO.marbleshopOrderId() != null && paymentDTO.marbleshopOrderId() != UUID.fromString("")) {
-        }
-        return payment;
+        payment.setPaymentType(paymentDTO.paymentType());
+        payment.setPayedValue(paymentDTO.payedValue());
+        order.addPayment(payment);
+        order.calculatePaymentStatus();
+
+        return paymentRepository.save(payment);
     }
 }

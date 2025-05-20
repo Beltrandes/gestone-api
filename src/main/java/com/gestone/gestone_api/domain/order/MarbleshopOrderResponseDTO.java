@@ -1,8 +1,10 @@
 package com.gestone.gestone_api.domain.order;
 
+import com.gestone.gestone_api.domain.customer.CustomerResponseDTO;
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItemResponseDTO;
 import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItemResponseDTO;
 import com.gestone.gestone_api.domain.payment.PaymentResponseDTO;
+import com.gestone.gestone_api.domain.payment.PaymentStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -13,7 +15,7 @@ public record MarbleshopOrderResponseDTO(
     UUID id,
     Integer localId,
     String workAddress,
-    String customerName,
+    CustomerResponseDTO customer,
     BigDecimal totalValue,
     BigDecimal totalArea,
     Integer discount,
@@ -26,16 +28,17 @@ public record MarbleshopOrderResponseDTO(
     LocalDateTime estimatedInstallmentDate,
     LocalDateTime installmentDate,
     String notes,
-    String paymentStatus,
+    PaymentStatus paymentStatus,
     LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    LocalDateTime updatedAt,
+    BigDecimal totalPaid
 ) {
     public MarbleshopOrderResponseDTO(MarbleshopOrder order) {
         this(
                 order.getId(),
                 order.getLocalId(),
                 order.getWorkAddress(),
-                order.getCustomer() != null ? order.getCustomer().getName() : null,
+                new CustomerResponseDTO(order.getCustomer()) ,
                 order.getTotalValue(),
                 order.getTotalArea(),
                 order.getDiscount(),
@@ -54,9 +57,10 @@ public record MarbleshopOrderResponseDTO(
                 order.getEstimatedInstallmentDate(),
                 order.getInstallmentDate(),
                 order.getNotes(),
-                order.getPaymentStatus() != null ? order.getPaymentStatus().name() : null,
+                order.getPaymentStatus(),
                 order.getCreatedAt(),
-                order.getUpdatedAt()
+                order.getUpdatedAt(),
+                order.getTotalPaid()
         );
     }
 }

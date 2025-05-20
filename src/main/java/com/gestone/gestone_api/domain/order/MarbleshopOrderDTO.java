@@ -11,7 +11,7 @@ public record MarbleshopOrderDTO(
     String workAddress,
     UUID quotationId,
     Integer discount,
-    List<PaymentDTO> payment,
+    List<PaymentDTO> payments,
     String notes
 ) {
 }

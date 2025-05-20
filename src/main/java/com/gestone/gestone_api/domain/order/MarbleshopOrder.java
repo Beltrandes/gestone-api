@@ -12,6 +12,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,13 +34,16 @@ public class MarbleshopOrder {
     private Integer discount;
     @Column(precision = 10, scale = 2)
     private BigDecimal finalValue = BigDecimal.ZERO;
+
+    @Column(precision = 10, scale = 2)
+    private BigDecimal totalPaid = BigDecimal.ZERO;
     @Enumerated(EnumType.STRING)
     private MarbleshopOrderStatus marbleshopOrderStatus = MarbleshopOrderStatus.PROJECTING;
-    @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MarbleshopItem> marbleshopItems = new ArrayList<>();
-    @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MiscellaneousItem> miscellaneousItems = new ArrayList<>();
-    @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "marbleshopOrder", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Payment> payments = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     private Marbleshop marbleshop;
@@ -49,7 +53,7 @@ public class MarbleshopOrder {
     private LocalDateTime installmentDate;
 
     private String notes;
-
+    @Enumerated(EnumType.STRING)
     private PaymentStatus paymentStatus;
     @CreationTimestamp
     private LocalDateTime createdAt;
@@ -69,6 +73,32 @@ public class MarbleshopOrder {
 
         this.finalValue = totalValue.multiply(BigDecimal.valueOf(1 - (discount / 100.0))).setScale(2, RoundingMode.HALF_UP);
 
+        this.paymentStatus = calculatePaymentStatus();
+
+    }
+
+    public PaymentStatus calculatePaymentStatus() {
+        BigDecimal totalPaid = getTotalPaid();
+
+
+        if (totalPaid.compareTo(this.finalValue) >= 0)
+            return PaymentStatus.PAID;
+
+        if (this.installmentDate != null && this.installmentDate.isBefore(LocalDateTime.now()))
+            return PaymentStatus.OVERDUE;
+
+        return PaymentStatus.PARTIALLY_PAID;
+    }
+
+    public void updatePaymentStatus() {
+        this.paymentStatus = calculatePaymentStatus();
+    }
+
+    public void addPayment(Payment payment) {
+        payment.setMarbleshopOrder(this);
+        this.payments.add(payment);
+        updatePaymentStatus();
+        setTotalPaid();
     }
 
     public UUID getId() {
@@ -195,14 +225,6 @@ public class MarbleshopOrder {
         this.notes = notes;
     }
 
-    public PaymentStatus getPaymentStatus() {
-        return paymentStatus;
-    }
-
-    public void setPaymentStatus(PaymentStatus paymentStatus) {
-        this.paymentStatus = paymentStatus;
-    }
-
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -225,5 +247,22 @@ public class MarbleshopOrder {
 
     public void setMiscellaneousItems(List<MiscellaneousItem> miscellaneousItems) {
         this.miscellaneousItems = miscellaneousItems;
+    }
+
+    public BigDecimal getTotalPaid() {
+        return payments.stream().map(Payment::getPayedValue).reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void setTotalPaid() {
+        this.totalPaid = getTotalPaid();
+    }
+
+    public PaymentStatus getPaymentStatus() {
+
+        return paymentStatus;
+    }
+
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.paymentStatus = paymentStatus;
     }
 }
