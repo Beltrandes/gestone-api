@@ -2,5 +2,5 @@ package com.gestone.gestone_api.domain.user;
 
 import java.util.UUID;
 
-public record LoginResponseDTO(String token, UUID marbleshopId, String email) {
+public record LoginResponseDTO(String token, UUID marbleshopId, String marbleshopName, String email) {
 }

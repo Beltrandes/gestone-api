@@ -1,0 +1,2 @@
+ALTER TABLE payment ADD COLUMN marbleshop_id UUID;
+ALTER TABLE payment ADD CONSTRAINT FK_PAYMENT_ON_MARBLESHOP FOREIGN KEY (marbleshop_id) REFERENCES marbleshop (id);

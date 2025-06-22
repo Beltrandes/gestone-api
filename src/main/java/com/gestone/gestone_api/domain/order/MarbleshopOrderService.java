@@ -88,6 +88,7 @@ public class MarbleshopOrderService implements IMarbleshopOrderService {
             payment.setPaymentType(paymentDTO.paymentType());
             payment.setDetails(paymentDTO.details());
             payment.setMarbleshopOrder(order);
+            payment.setMarbleshop(quotation.getMarbleshop());
             order.addPayment(payment);
 
         });

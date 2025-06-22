@@ -6,6 +6,7 @@ import com.gestone.gestone_api.domain.quotation.Quotation;
 import jakarta.persistence.*;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -50,14 +51,17 @@ public class MarbleshopItem {
         this.unitArea = this.measureX.multiply(this.measureY);
         if (this.marbleshopMaterial.getPrice() != null) {
             this.unitValue = this.unitArea.multiply(this.marbleshopMaterial.getPrice());
+            this.unitValue = this.unitValue.setScale(0, RoundingMode.UP);
         }
         marbleshopSubItems.forEach(marbleshopSubItem -> {
             marbleshopSubItem.calculate();
             this.unitValue = this.unitValue.add(marbleshopSubItem.getTotalValue());
+            this.unitValue = this.unitValue.setScale(0, RoundingMode.UP);
             this.unitArea = this.unitArea.add(marbleshopSubItem.getTotalArea());
 
         });
         this.totalValue = this.unitValue.multiply(BigDecimal.valueOf(this.quantity));
+        this.totalValue = this.totalValue.setScale(0, RoundingMode.UP);
         this.totalArea = this.unitArea.multiply(BigDecimal.valueOf(this.quantity));
     }
 

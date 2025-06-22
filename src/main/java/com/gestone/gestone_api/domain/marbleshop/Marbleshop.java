@@ -1,5 +1,6 @@
 package com.gestone.gestone_api.domain.marbleshop;
 
+import com.gestone.gestone_api.domain.bill.Bill;
 import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.employee.Employee;
 import com.gestone.gestone_api.domain.marbleshop_material.MarbleshopMaterial;
@@ -38,6 +39,8 @@ public class Marbleshop {
 
     @OneToMany(mappedBy = "marbleshop")
     private List<MarbleshopOrder> orders = new ArrayList<>();
+    @OneToMany(mappedBy = "marbleshop")
+    private List<Bill> bills = new ArrayList<>();
 
     private String logoPath;
     @CreationTimestamp
@@ -154,5 +157,13 @@ public class Marbleshop {
 
     public void setOrders(List<MarbleshopOrder> orders) {
         this.orders = orders;
+    }
+
+    public List<Bill> getBills() {
+        return bills;
+    }
+
+    public void setBills(List<Bill> bills) {
+        this.bills = bills;
     }
 }

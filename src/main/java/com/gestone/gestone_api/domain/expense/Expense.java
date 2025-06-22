@@ -1,8 +1,10 @@
-package com.gestone.gestone_api.domain.payment;
+package com.gestone.gestone_api.domain.expense;
 
+import com.gestone.gestone_api.domain.bill.Bill;
 import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.domain.order.MarbleshopOrder;
+import com.gestone.gestone_api.domain.payment.PaymentType;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -11,26 +13,24 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-public class Payment {
-
+public class Expense {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Customer customer;
     private String details;
-    private BigDecimal payedValue = BigDecimal.ZERO;
+    private BigDecimal paidValue = BigDecimal.ZERO;
     @Enumerated(value = EnumType.STRING)
     private PaymentType paymentType;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REFRESH)
-    private MarbleshopOrder marbleshopOrder;
+    private Bill bill;
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     private LocalDateTime paymentDate;
     @ManyToOne(fetch = FetchType.LAZY)
     private Marbleshop marbleshop;
-    public Payment() {
+
+    public Expense() {
     }
 
     public UUID getId() {
@@ -45,15 +45,13 @@ public class Payment {
         this.details = details;
     }
 
-
-    public BigDecimal getPayedValue() {
-        return payedValue;
+    public BigDecimal getPaidValue() {
+        return paidValue;
     }
 
-    public void setPayedValue(BigDecimal payedValue) {
-        this.payedValue = payedValue;
+    public void setPaidValue(BigDecimal paidValue) {
+        this.paidValue = paidValue;
     }
-
 
     public PaymentType getPaymentType() {
         return paymentType;
@@ -63,12 +61,12 @@ public class Payment {
         this.paymentType = paymentType;
     }
 
-    public MarbleshopOrder getMarbleshopOrder() {
-        return marbleshopOrder;
+    public Bill getBill() {
+        return bill;
     }
 
-    public void setMarbleshopOrder(MarbleshopOrder marbleshopOrder) {
-        this.marbleshopOrder = marbleshopOrder;
+    public void setBill(Bill bill) {
+        this.bill = bill;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -79,12 +77,12 @@ public class Payment {
         this.createdAt = createdAt;
     }
 
-    public Customer getCustomer() {
-        return customer;
+    public LocalDateTime getPaymentDate() {
+        return paymentDate;
     }
 
-    public void setCustomer(Customer customer) {
-        this.customer = customer;
+    public void setPaymentDate(LocalDateTime paymentDate) {
+        this.paymentDate = paymentDate;
     }
 
     public Marbleshop getMarbleshop() {
@@ -93,13 +91,5 @@ public class Payment {
 
     public void setMarbleshop(Marbleshop marbleshop) {
         this.marbleshop = marbleshop;
-    }
-
-    public LocalDateTime getPaymentDate() {
-        return paymentDate;
-    }
-
-    public void setPaymentDate(LocalDateTime paymentDate) {
-        this.paymentDate = paymentDate;
     }
 }

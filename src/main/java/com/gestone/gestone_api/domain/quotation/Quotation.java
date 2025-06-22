@@ -9,6 +9,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +75,7 @@ public class Quotation {
                 .add(miscellaneousItems.stream()
                         .map(MiscellaneousItem::getTotalValue)
                         .reduce(BigDecimal.ZERO, BigDecimal::add));
+        this.totalValue = this.totalValue.setScale(0, RoundingMode.UP);
 
         this.totalArea = marbleshopItems.stream()
                 .map(MarbleshopItem::getTotalArea)

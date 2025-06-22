@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.UUID;
 
 @Service
 public class PaymentService {
@@ -24,9 +26,15 @@ public class PaymentService {
         payment.setDetails(paymentDTO.details());
         payment.setPaymentType(paymentDTO.paymentType());
         payment.setPayedValue(paymentDTO.payedValue());
+        payment.setPaymentDate(paymentDTO.paymentDate());
+        payment.setMarbleshop(order.getMarbleshop());
         order.addPayment(payment);
         order.calculatePaymentStatus();
 
         return paymentRepository.save(payment);
+    }
+
+    public List<Payment> findAll(UUID marbleshopId) {
+        return paymentRepository.findByMarbleshopId(marbleshopId);
     }
 }

@@ -23,7 +23,6 @@ public class MarbleshopOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
-
     private Integer localId;
     private String workAddress;
     @ManyToOne(fetch = FetchType.LAZY)

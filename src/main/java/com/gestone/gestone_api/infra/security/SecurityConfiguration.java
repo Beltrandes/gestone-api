@@ -58,8 +58,13 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.PATCH, "/api/v1/miscellaneous-material/update/price").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/order").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/order").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/order/pdf/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/payment").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/payment").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/bill").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/bill").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/expense").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/expense").hasRole("ADMIN")
                         .anyRequest().authenticated()).csrf(AbstractHttpConfigurer::disable).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
