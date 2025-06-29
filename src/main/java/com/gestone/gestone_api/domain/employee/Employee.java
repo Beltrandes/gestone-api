@@ -1,25 +1,24 @@
 package com.gestone.gestone_api.domain.employee;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import com.gestone.gestone_api.domain.user.User;
+import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
 
 @Entity
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+
+    @OneToOne
+    private User user = null;
     private String name;
     private String documentNumber;
     private BigDecimal salary;
@@ -27,6 +26,8 @@ public class Employee {
     private EmployeeRole employeeRole;
     @ManyToOne(fetch = FetchType.LAZY)
     private Marbleshop marbleshop;
+    private LocalDate hireDate;
+    private Boolean isActive = true;
     @CreationTimestamp
     private LocalDateTime createdAt;
     
@@ -106,6 +107,31 @@ public class Employee {
     }
 
 
-    
-    
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public LocalDate getHireDate() {
+        return hireDate;
+    }
+
+    public void setHireDate(LocalDate hireDate) {
+        this.hireDate = hireDate;
+    }
+
+    public Boolean getActive() {
+        return isActive;
+    }
+
+    public void setActive(Boolean active) {
+        isActive = active;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }

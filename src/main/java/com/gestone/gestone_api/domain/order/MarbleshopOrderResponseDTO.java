@@ -18,7 +18,7 @@ public record MarbleshopOrderResponseDTO(
     CustomerResponseDTO customer,
     BigDecimal totalValue,
     BigDecimal totalArea,
-    Integer discount,
+    BigDecimal discount,
     BigDecimal finalValue,
     String marbleshopOrderStatus,
     List<MarbleshopItemResponseDTO> marbleshopItems,

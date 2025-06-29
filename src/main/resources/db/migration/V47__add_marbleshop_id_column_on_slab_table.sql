@@ -1,0 +1,2 @@
+ALTER TABLE slab ADD COLUMN marbleshop_id UUID;
+ALTER TABLE slab ADD CONSTRAINT FK_SLAB_ON_MARBLESHOP FOREIGN KEY (marbleshop_id) REFERENCES marbleshop (id);

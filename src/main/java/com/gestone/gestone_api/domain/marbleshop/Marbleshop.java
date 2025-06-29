@@ -7,6 +7,7 @@ import com.gestone.gestone_api.domain.marbleshop_material.MarbleshopMaterial;
 import com.gestone.gestone_api.domain.miscellaneous_material.MiscellaneousMaterial;
 import com.gestone.gestone_api.domain.order.MarbleshopOrder;
 import com.gestone.gestone_api.domain.quotation.Quotation;
+import com.gestone.gestone_api.domain.slab.Slab;
 import com.gestone.gestone_api.domain.user.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -41,6 +42,9 @@ public class Marbleshop {
     private List<MarbleshopOrder> orders = new ArrayList<>();
     @OneToMany(mappedBy = "marbleshop")
     private List<Bill> bills = new ArrayList<>();
+
+    @OneToMany(mappedBy = "marbleshop")
+    private List<Slab> slabs = new ArrayList<>();
 
     private String logoPath;
     @CreationTimestamp
@@ -165,5 +169,13 @@ public class Marbleshop {
 
     public void setBills(List<Bill> bills) {
         this.bills = bills;
+    }
+
+    public List<Slab> getSlabs() {
+        return slabs;
+    }
+
+    public void setSlabs(List<Slab> slabs) {
+        this.slabs = slabs;
     }
 }

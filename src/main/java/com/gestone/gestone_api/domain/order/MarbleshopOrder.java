@@ -30,7 +30,7 @@ public class MarbleshopOrder {
     private BigDecimal totalValue = BigDecimal.ZERO;
     private BigDecimal totalArea = BigDecimal.ZERO;
 
-    private Integer discount;
+    private BigDecimal discount;
     @Column(precision = 10, scale = 2)
     private BigDecimal finalValue = BigDecimal.ZERO;
 
@@ -70,7 +70,7 @@ public class MarbleshopOrder {
         this.totalValue = marbleshopItemsTotalValue.add(miscellaneousItemsTotalValue);
         this.totalArea = getMarbleshopItems().stream().map(MarbleshopItem::getTotalArea).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        this.finalValue = totalValue.multiply(BigDecimal.valueOf(1 - (discount / 100.0))).setScale(2, RoundingMode.HALF_UP);
+        this.finalValue = totalValue.subtract(this.discount);
 
         this.paymentStatus = calculatePaymentStatus();
 
@@ -184,11 +184,11 @@ public class MarbleshopOrder {
         this.workAddress = workAddress;
     }
 
-    public Integer getDiscount() {
+    public BigDecimal getDiscount() {
         return discount;
     }
 
-    public void setDiscount(Integer discount) {
+    public void setDiscount(BigDecimal discount) {
         this.discount = discount;
     }
 

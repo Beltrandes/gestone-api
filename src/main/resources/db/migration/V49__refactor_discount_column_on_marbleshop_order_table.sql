@@ -1,0 +1,1 @@
+ALTER TABLE marbleshop_order ALTER COLUMN discount TYPE DECIMAL(10, 2);
