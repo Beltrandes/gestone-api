@@ -1,0 +1,1 @@
+ALTER TABLE slab_movement ADD COLUMN notes TEXT;

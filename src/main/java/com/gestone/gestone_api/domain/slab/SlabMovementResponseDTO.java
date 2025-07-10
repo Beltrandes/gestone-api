@@ -10,7 +10,8 @@ public record SlabMovementResponseDTO(
         UUID productionOrderItemId,
         BigDecimal areaMoved,
         SlabMovementType movementType,
-        LocalDateTime createdAt
+        LocalDateTime createdAt,
+        String notes
 ) {
 
     public SlabMovementResponseDTO(SlabMovement slabMovement) {
@@ -20,7 +21,8 @@ public record SlabMovementResponseDTO(
                 slabMovement.getProductionOrderItem().getId(),
                 slabMovement.getAreaMoved(),
                 slabMovement.getMovementType(),
-                slabMovement.getCreatedAt()
+                slabMovement.getCreatedAt(),
+                slabMovement.getNotes()
         );
     }
 }

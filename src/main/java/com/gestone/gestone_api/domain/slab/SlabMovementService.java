@@ -22,6 +22,7 @@ public class SlabMovementService {
         slabMovement.setMovementType(slabMovementRequestDTO.movementType());
         slabMovement.setAreaMoved(slabMovementRequestDTO.areaMoved());
         slabMovement.setProductionOrderItem(productionOrderItem);
+        slabMovement.setNotes(slabMovementRequestDTO.notes());
         slabMovement.calculateAreaMoved();
         return slabMovementRepository.save(slabMovement);
     }

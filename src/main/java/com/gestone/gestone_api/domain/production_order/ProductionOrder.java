@@ -1,5 +1,6 @@
 package com.gestone.gestone_api.domain.production_order;
 
+import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.domain.order.MarbleshopOrder;
 import jakarta.persistence.*;
 
@@ -34,7 +35,8 @@ public class ProductionOrder {
     @OneToMany(mappedBy = "productionOrder", cascade = CascadeType.ALL)
     private List<ProductionOrderItem> productionOrderItems = new ArrayList<>();
 
-
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Marbleshop marbleshop;
     public ProductionOrder() {
     }
 
@@ -120,5 +122,13 @@ public class ProductionOrder {
 
     public UUID getId() {
         return id;
+    }
+
+    public Marbleshop getMarbleshop() {
+        return marbleshop;
+    }
+
+    public void setMarbleshop(Marbleshop marbleshop) {
+        this.marbleshop = marbleshop;
     }
 }

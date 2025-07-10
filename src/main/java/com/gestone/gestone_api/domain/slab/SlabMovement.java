@@ -23,6 +23,8 @@ public class SlabMovement {
     @CreationTimestamp
     private LocalDateTime createdAt;
 
+    private String notes;
+
     public SlabMovement() {
     }
 
@@ -72,5 +74,13 @@ public class SlabMovement {
 
     public UUID getId() {
         return id;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

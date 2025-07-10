@@ -6,6 +6,7 @@ import com.gestone.gestone_api.domain.employee.Employee;
 import com.gestone.gestone_api.domain.marbleshop_material.MarbleshopMaterial;
 import com.gestone.gestone_api.domain.miscellaneous_material.MiscellaneousMaterial;
 import com.gestone.gestone_api.domain.order.MarbleshopOrder;
+import com.gestone.gestone_api.domain.production_order.ProductionOrder;
 import com.gestone.gestone_api.domain.quotation.Quotation;
 import com.gestone.gestone_api.domain.slab.Slab;
 import com.gestone.gestone_api.domain.user.User;
@@ -45,6 +46,8 @@ public class Marbleshop {
 
     @OneToMany(mappedBy = "marbleshop")
     private List<Slab> slabs = new ArrayList<>();
+    @OneToMany(mappedBy = "marbleshop")
+    private List<ProductionOrder> productionOrders = new ArrayList<>();
 
     private String logoPath;
     @CreationTimestamp

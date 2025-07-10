@@ -8,7 +8,8 @@ public record SlabMovementRequestDTO(
         UUID productionOrderItemId,
         UUID slabId,
         BigDecimal areaMoved,
-        SlabMovementType movementType
+        SlabMovementType movementType,
+        String notes
 ) {
 
 

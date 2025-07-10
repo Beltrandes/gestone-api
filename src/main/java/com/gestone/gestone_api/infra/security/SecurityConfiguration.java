@@ -67,7 +67,10 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v1/expense").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/slab").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/production").hasRole("ADMIN").requestMatchers(HttpMethod.GET, "/api/v1/slab").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/production/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/production/project-image/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/production").hasRole("ADMIN")
+
                         .anyRequest().authenticated()).csrf(AbstractHttpConfigurer::disable).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
