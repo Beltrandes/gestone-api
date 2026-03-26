@@ -7,22 +7,22 @@ import java.util.UUID;
 public record SlabMovementResponseDTO(
         UUID id,
         UUID slabId,
+        SlabMovementType movementType,
         UUID productionOrderItemId,
         BigDecimal areaMoved,
-        SlabMovementType movementType,
-        LocalDateTime createdAt,
-        String notes
+        String notes,
+        LocalDateTime createdAt
 ) {
 
     public SlabMovementResponseDTO(SlabMovement slabMovement) {
         this(
                 slabMovement.getId(),
                 slabMovement.getSlab().getId(),
-                slabMovement.getProductionOrderItem().getId(),
-                slabMovement.getAreaMoved(),
                 slabMovement.getMovementType(),
-                slabMovement.getCreatedAt(),
-                slabMovement.getNotes()
+                slabMovement.getProductionOrderItem() != null ? slabMovement.getProductionOrderItem().getId() : null,
+                slabMovement.getAreaMoved(),
+                slabMovement.getNotes(),
+                slabMovement.getCreatedAt()
         );
     }
 }

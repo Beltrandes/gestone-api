@@ -21,15 +21,17 @@ public class MarbleshopItem {
     private BigDecimal measureX = BigDecimal.ZERO;
     private BigDecimal measureY = BigDecimal.ZERO;
     private Integer quantity;
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private MarbleshopMaterial marbleshopMaterial;
     private BigDecimal unitValue = BigDecimal.ZERO;
     private BigDecimal unitArea = BigDecimal.ZERO;
     private BigDecimal totalValue = BigDecimal.ZERO;
     private BigDecimal totalArea = BigDecimal.ZERO;
+    private BigDecimal materialPriceSnapshot;
+
     @Enumerated(value = EnumType.STRING)
     private MarbleshopItemType marbleshopItemType;
-    @OneToMany(mappedBy = "marbleshopItem", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "marbleshopItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<MarbleshopSubItem> marbleshopSubItems = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     private Quotation quotation;
@@ -48,21 +50,54 @@ public class MarbleshopItem {
     }
 
     public void calculate() {
-        this.unitArea = this.measureX.multiply(this.measureY);
-        if (this.marbleshopMaterial.getPrice() != null) {
-            this.unitValue = this.unitArea.multiply(this.marbleshopMaterial.getPrice());
-            this.unitValue = this.unitValue.setScale(0, RoundingMode.UP);
+        if (this.measureX != null && this.measureY != null) {
+            this.unitArea = this.measureX.multiply(this.measureY);
+        } else {
+            this.unitArea = BigDecimal.ZERO;
         }
+
+        if (this.materialPriceSnapshot == null && this.marbleshopMaterial != null && this.marbleshopMaterial.getPrice() != null) {
+            this.materialPriceSnapshot = this.marbleshopMaterial.getPrice();
+        }
+
+        if (this.materialPriceSnapshot != null) {
+            this.unitValue = this.unitArea.multiply(this.materialPriceSnapshot);
+            this.unitValue = this.unitValue.setScale(2, RoundingMode.HALF_UP);
+        } else {
+            this.unitValue = BigDecimal.ZERO;
+        }
+
         marbleshopSubItems.forEach(marbleshopSubItem -> {
             marbleshopSubItem.calculate();
             this.unitValue = this.unitValue.add(marbleshopSubItem.getTotalValue());
-            this.unitValue = this.unitValue.setScale(0, RoundingMode.UP);
+            this.unitValue = this.unitValue.setScale(2, RoundingMode.HALF_UP);
             this.unitArea = this.unitArea.add(marbleshopSubItem.getTotalArea());
-
         });
-        this.totalValue = this.unitValue.multiply(BigDecimal.valueOf(this.quantity));
-        this.totalValue = this.totalValue.setScale(0, RoundingMode.UP);
-        this.totalArea = this.unitArea.multiply(BigDecimal.valueOf(this.quantity));
+
+        if (this.quantity != null) {
+            this.totalValue = this.unitValue.multiply(BigDecimal.valueOf(this.quantity));
+            this.totalValue = this.totalValue.setScale(2, RoundingMode.HALF_UP);
+            this.totalArea = this.unitArea.multiply(BigDecimal.valueOf(this.quantity));
+        } else {
+            this.totalValue = BigDecimal.ZERO;
+            this.totalArea = BigDecimal.ZERO;
+        }
+    }
+
+    public void calculateTotalValue() {
+        if (this.quantity != null) {
+            this.totalValue = this.unitValue.multiply(BigDecimal.valueOf(this.quantity)).setScale(2, RoundingMode.HALF_UP);
+        } else {
+            this.totalValue = BigDecimal.ZERO;
+        }
+    }
+
+    public BigDecimal getMaterialPriceSnapshot() {
+        return materialPriceSnapshot;
+    }
+
+    public void setMaterialPriceSnapshot(BigDecimal materialPriceSnapshot) {
+        this.materialPriceSnapshot = materialPriceSnapshot;
     }
 
 
@@ -174,13 +209,7 @@ public class MarbleshopItem {
         this.quotation = quotation;
     }
 
-    public MarbleshopOrder getServiceOrder() {
-        return marbleshopOrder;
-    }
 
-    public void setServiceOrder(MarbleshopOrder marbleshopOrder) {
-        this.marbleshopOrder = marbleshopOrder;
-    }
 
 
 
@@ -190,5 +219,27 @@ public class MarbleshopItem {
 
     public void setMarbleshopOrder(MarbleshopOrder marbleshopOrder) {
         this.marbleshopOrder = marbleshopOrder;
+    }
+
+    public void addMarbleshopSubItem(MarbleshopSubItem subItem) {
+        this.marbleshopSubItems.add(subItem);
+        subItem.setMarbleshopItem(this);
+    }
+    public void removeSubItem(MarbleshopSubItem subItem) {
+        this.marbleshopSubItems.remove(subItem);
+        subItem.setMarbleshopItem(null);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MarbleshopItem that = (MarbleshopItem) o;
+        return id != null && id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -45,11 +46,36 @@ public class MarbleshopSubItem {
     }
 
     public void calculate() {
-        this.area = this.measureX.multiply(this.measureY);
-        this.totalArea = this.area.multiply(BigDecimal.valueOf(this.quantity));
+        if (this.measureX != null && this.measureY != null) {
+            this.area = this.measureX.multiply(this.measureY);
+        } else {
+            this.area = BigDecimal.ZERO;
+        }
+        
+        if (this.quantity != null) {
+            this.totalArea = this.area.multiply(BigDecimal.valueOf(this.quantity));
+        } else {
+            this.totalArea = BigDecimal.ZERO;
+        }
+
+        BigDecimal priceToUse = null;
         if (this.marbleshopItem != null) {
-            this.value = this.area.multiply(this.marbleshopItem.getMarbleshopMaterial().getPrice());
-            this.totalValue = this.value.multiply(BigDecimal.valueOf(this.quantity));
+            priceToUse = this.marbleshopItem.getMaterialPriceSnapshot();
+            if (priceToUse == null && this.marbleshopItem.getMarbleshopMaterial() != null) {
+                priceToUse = this.marbleshopItem.getMarbleshopMaterial().getPrice();
+            }
+        }
+
+        if (priceToUse != null) {
+            this.value = this.area.multiply(priceToUse).setScale(2, RoundingMode.HALF_UP);
+            if (this.quantity != null) {
+                this.totalValue = this.value.multiply(BigDecimal.valueOf(this.quantity)).setScale(2, RoundingMode.HALF_UP);
+            } else {
+                this.totalValue = BigDecimal.ZERO;
+            }
+        } else {
+            this.value = BigDecimal.ZERO;
+            this.totalValue = BigDecimal.ZERO;
         }
     }
 
@@ -152,5 +178,18 @@ public class MarbleshopSubItem {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MarbleshopSubItem that = (MarbleshopSubItem) o;
+        return id != null && id.equals(that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }

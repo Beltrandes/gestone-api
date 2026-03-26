@@ -18,6 +18,8 @@ public class QuotationResponseDTO {
     Integer deadlineDays;
     Integer daysForDue;
     BigDecimal totalValue;
+    BigDecimal materialTotalValue;
+    BigDecimal installationValue;
     BigDecimal totalArea;
     QuotationStatus quotationStatus;
     CustomerListResponseDTO customer;
@@ -25,8 +27,8 @@ public class QuotationResponseDTO {
     List<MarbleshopItemResponseDTO> marbleshopItems;
     List<MiscellaneousItemResponseDTO> miscellaneousItems;
     LocalDateTime createdAt;
-
     String paymentCondition;
+    UUID marbleshopOrderId;
 
     public QuotationResponseDTO(Quotation quotation) {
         this.id = quotation.getId();
@@ -36,6 +38,8 @@ public class QuotationResponseDTO {
         this.deadlineDays = quotation.getDeadlineDays();
         this.daysForDue = quotation.getDaysForDue();
         this.totalValue = quotation.getTotalValue();
+        this.materialTotalValue = quotation.getMaterialTotalValue();
+        this.installationValue = quotation.getInstallationValue();
         this.totalArea = quotation.getTotalArea();
         this.quotationStatus = quotation.getQuotationStatus();
         this.customer = new CustomerListResponseDTO(quotation.getCustomer());
@@ -44,6 +48,7 @@ public class QuotationResponseDTO {
         this.marbleshopItems = quotation.getMarbleshopItems().stream().map(MarbleshopItemResponseDTO::new).toList();
         this.createdAt = quotation.getCreatedAt();
         this.paymentCondition = quotation.getPaymentCondition();
+        this.marbleshopOrderId = quotation.getMarbleshopOrder() != null ? quotation.getMarbleshopOrder().getId() : null;
     }
 
     public UUID getId() {
@@ -96,6 +101,22 @@ public class QuotationResponseDTO {
 
     public void setTotalValue(BigDecimal totalValue) {
         this.totalValue = totalValue;
+    }
+
+    public BigDecimal getMaterialTotalValue() {
+        return materialTotalValue;
+    }
+
+    public void setMaterialTotalValue(BigDecimal materialTotalValue) {
+        this.materialTotalValue = materialTotalValue;
+    }
+
+    public BigDecimal getInstallationValue() {
+        return installationValue;
+    }
+
+    public void setInstallationValue(BigDecimal installationValue) {
+        this.installationValue = installationValue;
     }
 
     public BigDecimal getTotalArea() {
@@ -160,5 +181,13 @@ public class QuotationResponseDTO {
 
     public void setPaymentCondition(String paymentCondition) {
         this.paymentCondition = paymentCondition;
+    }
+
+    public UUID getMarbleshopOrderId() {
+        return marbleshopOrderId;
+    }
+
+    public void setMarbleshopOrderId(UUID marbleshopOrderId) {
+        this.marbleshopOrderId = marbleshopOrderId;
     }
 }

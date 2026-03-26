@@ -1,13 +1,13 @@
 package com.gestone.gestone_api.domain.production_order;
 
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
-import com.gestone.gestone_api.domain.slab.Slab;
 import com.gestone.gestone_api.domain.slab.SlabMovement;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+
 @Entity
 public class ProductionOrderItem {
     @Id

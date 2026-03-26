@@ -1,0 +1,5 @@
+ALTER TABLE bill ADD COLUMN supplier_name VARCHAR(255);
+ALTER TABLE bill ADD COLUMN is_recurring BOOLEAN DEFAULT FALSE;
+ALTER TABLE bill ADD COLUMN installment_number INTEGER;
+ALTER TABLE bill ADD COLUMN total_installments INTEGER;
+ALTER TABLE bill ADD COLUMN parent_bill_id UUID;

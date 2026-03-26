@@ -17,6 +17,8 @@ public record MarbleshopOrderResponseDTO(
     String workAddress,
     CustomerResponseDTO customer,
     BigDecimal totalValue,
+    BigDecimal materialTotalValue,
+    BigDecimal installationValue,
     BigDecimal totalArea,
     BigDecimal discount,
     BigDecimal finalValue,
@@ -31,7 +33,8 @@ public record MarbleshopOrderResponseDTO(
     PaymentStatus paymentStatus,
     LocalDateTime createdAt,
     LocalDateTime updatedAt,
-    BigDecimal totalPaid
+    BigDecimal totalPaid,
+    UUID quotationId
 ) {
     public MarbleshopOrderResponseDTO(MarbleshopOrder order) {
         this(
@@ -40,6 +43,8 @@ public record MarbleshopOrderResponseDTO(
                 order.getWorkAddress(),
                 new CustomerResponseDTO(order.getCustomer()) ,
                 order.getTotalValue(),
+                order.getMaterialTotalValue(),
+                order.getInstallationValue(),
                 order.getTotalArea(),
                 order.getDiscount(),
                 order.getFinalValue(),
@@ -60,7 +65,8 @@ public record MarbleshopOrderResponseDTO(
                 order.getPaymentStatus(),
                 order.getCreatedAt(),
                 order.getUpdatedAt(),
-                order.getTotalPaid()
+                order.getTotalPaid(),
+                order.getQuotation() != null ? order.getQuotation().getId() : null
         );
     }
 }

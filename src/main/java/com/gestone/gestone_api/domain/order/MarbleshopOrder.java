@@ -6,6 +6,7 @@ import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
 import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
 import com.gestone.gestone_api.domain.payment.Payment;
 import com.gestone.gestone_api.domain.payment.PaymentStatus;
+import com.gestone.gestone_api.domain.quotation.Quotation;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -23,11 +24,18 @@ public class MarbleshopOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
+    
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "quotation_id")
+    private Quotation quotation;
+
     private Integer localId;
     private String workAddress;
     @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
     private BigDecimal totalValue = BigDecimal.ZERO;
+    private BigDecimal materialTotalValue = BigDecimal.ZERO;
+    private BigDecimal installationValue = BigDecimal.ZERO;
     private BigDecimal totalArea = BigDecimal.ZERO;
 
     private BigDecimal discount;
@@ -67,10 +75,11 @@ public class MarbleshopOrder {
 
         var miscellaneousItemsTotalValue = getMiscellaneousItems().stream().map(MiscellaneousItem::getTotalValue).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        this.totalValue = marbleshopItemsTotalValue.add(miscellaneousItemsTotalValue);
+        this.materialTotalValue = marbleshopItemsTotalValue.add(miscellaneousItemsTotalValue);
+        this.totalValue = this.materialTotalValue.add(this.installationValue != null ? this.installationValue : BigDecimal.ZERO);
         this.totalArea = getMarbleshopItems().stream().map(MarbleshopItem::getTotalArea).reduce(BigDecimal.ZERO, BigDecimal::add);
 
-        this.finalValue = totalValue.subtract(this.discount);
+        this.finalValue = totalValue.subtract(this.discount != null ? this.discount : BigDecimal.ZERO);
 
         this.paymentStatus = calculatePaymentStatus();
 
@@ -110,6 +119,22 @@ public class MarbleshopOrder {
 
     public void setTotalValue(BigDecimal totalValue) {
         this.totalValue = totalValue;
+    }
+
+    public BigDecimal getMaterialTotalValue() {
+        return materialTotalValue;
+    }
+
+    public void setMaterialTotalValue(BigDecimal materialTotalValue) {
+        this.materialTotalValue = materialTotalValue;
+    }
+
+    public BigDecimal getInstallationValue() {
+        return installationValue;
+    }
+
+    public void setInstallationValue(BigDecimal installationValue) {
+        this.installationValue = installationValue;
     }
 
     public BigDecimal getTotalArea() {
@@ -263,5 +288,13 @@ public class MarbleshopOrder {
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
         this.paymentStatus = paymentStatus;
+    }
+
+    public Quotation getQuotation() {
+        return quotation;
+    }
+
+    public void setQuotation(Quotation quotation) {
+        this.quotation = quotation;
     }
 }

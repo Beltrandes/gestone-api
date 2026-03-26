@@ -40,7 +40,7 @@ public class Slab {
     @ManyToOne(fetch = FetchType.LAZY)
     private Marbleshop marbleshop;
 
-
+    private boolean active = true;
 
     public Slab() {
     }
@@ -155,5 +155,13 @@ public class Slab {
 
     public UUID getId() {
         return id;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

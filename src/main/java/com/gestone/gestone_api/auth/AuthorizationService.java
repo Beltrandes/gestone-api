@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import com.gestone.gestone_api.domain.user.User;
 import com.gestone.gestone_api.domain.user.UserRepository;
 
 @Service

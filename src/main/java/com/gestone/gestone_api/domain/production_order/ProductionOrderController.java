@@ -39,12 +39,10 @@ public class ProductionOrderController {
         return ResponseEntity.ok("Project uploaded successfully");
     }
 
-    @GetMapping("/project-image/{id}")
-    public ResponseEntity<UrlResource> getProjectImage(@PathVariable UUID id) throws IOException {
-        ProductionOrder order = productionOrderService.findById(id);
-
-        String filePath = order.getProjectUrl();
-        Path path = Paths.get(filePath);
+    @GetMapping("/project-image/{fileName:.+}")
+    public ResponseEntity<UrlResource> getProjectImage(@PathVariable String fileName) throws IOException {
+        String uploadDir = "/uploads/projects/";
+        Path path = Paths.get(uploadDir + fileName);
 
         // Verificar se o arquivo existe
         if (!Files.exists(path)) {
@@ -60,5 +58,18 @@ public class ProductionOrderController {
         return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType(contentType != null ? contentType : "application/octet-stream"))
                 .body(resource);
+    }
+
+    @PutMapping("/{orderId}/item/{itemId}/status")
+    public ResponseEntity<ProductionOrderResponseDTO> updateItemStatus(
+            @PathVariable UUID orderId,
+            @PathVariable UUID itemId,
+            @RequestBody String status) {
+        
+        // As a simple payload, we'll parse the plain string representing the enum, trimming potential json quotes
+        ProductionOrderItemStatus enumStatus = ProductionOrderItemStatus.valueOf(status.replace("\"", "").trim());
+        ProductionOrder updatedOrder = productionOrderService.updateItemStatus(itemId, enumStatus);
+        
+        return ResponseEntity.ok(new ProductionOrderResponseDTO(updatedOrder));
     }
 }

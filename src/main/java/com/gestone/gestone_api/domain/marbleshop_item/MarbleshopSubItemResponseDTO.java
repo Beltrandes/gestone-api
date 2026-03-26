@@ -32,6 +32,10 @@ public class MarbleshopSubItemResponseDTO {
         this.totalArea = marbleshopSubItem.getTotalArea();
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public BigDecimal getMeasureX() {
         return measureX;
     }

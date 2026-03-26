@@ -4,6 +4,7 @@ import com.gestone.gestone_api.domain.customer.Customer;
 import com.gestone.gestone_api.domain.marbleshop.Marbleshop;
 import com.gestone.gestone_api.domain.marbleshop_item.MarbleshopItem;
 import com.gestone.gestone_api.domain.miscellaneous_item.MiscellaneousItem;
+import com.gestone.gestone_api.domain.order.MarbleshopOrder;
 import com.gestone.gestone_api.domain.user.User;
 import jakarta.persistence.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,6 +27,8 @@ public class Quotation {
     private Integer deadlineDays;
     private Integer daysForDue;
     private BigDecimal totalValue = BigDecimal.ZERO;
+    private BigDecimal materialTotalValue = BigDecimal.ZERO;
+    private BigDecimal installationValue = BigDecimal.ZERO;
     private BigDecimal totalArea = BigDecimal.ZERO;
     private QuotationStatus quotationStatus = QuotationStatus.PENDING;
 
@@ -39,12 +42,15 @@ public class Quotation {
     private List<MiscellaneousItem> miscellaneousItems = new ArrayList<>();
     @ManyToOne(fetch = FetchType.LAZY)
     private Marbleshop marbleshop;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private User user;
     @CreationTimestamp
     private LocalDateTime createdAt;
 
     private String paymentCondition;
+
+    @OneToOne(mappedBy = "quotation", fetch = FetchType.LAZY)
+    private MarbleshopOrder marbleshopOrder;
 
     public Quotation() {
     }
@@ -59,23 +65,31 @@ public class Quotation {
         this.paymentCondition = paymentCondition;
     }
 
-    public void checkDueDate() {
-        if (QuotationStatus.PENDING.equals(quotationStatus)) {
+    public boolean checkDueDate() {
+        if (QuotationStatus.PENDING.equals(quotationStatus) && daysForDue != null && createdAt != null) {
             if (LocalDateTime.now().isAfter(createdAt.plusDays(daysForDue))) {
                 this.quotationStatus = QuotationStatus.EXPIRED;
+                return true;
             }
         }
+        return false;
+    }
 
+    public LocalDateTime getDueDate() {
+        return this.createdAt.plusDays(daysForDue);
     }
 
     public void calculate() {
-        this.totalValue = marbleshopItems.stream()
+        this.materialTotalValue = marbleshopItems.stream()
                 .map(MarbleshopItem::getTotalValue)
                 .reduce(BigDecimal.ZERO, BigDecimal::add)
                 .add(miscellaneousItems.stream()
                         .map(MiscellaneousItem::getTotalValue)
                         .reduce(BigDecimal.ZERO, BigDecimal::add));
-        this.totalValue = this.totalValue.setScale(0, RoundingMode.UP);
+        this.materialTotalValue = this.materialTotalValue.setScale(2, RoundingMode.HALF_UP);
+
+        this.totalValue = this.materialTotalValue.add(this.installationValue != null ? this.installationValue : BigDecimal.ZERO);
+        this.totalValue = this.totalValue.setScale(2, RoundingMode.HALF_UP);
 
         this.totalArea = marbleshopItems.stream()
                 .map(MarbleshopItem::getTotalArea)
@@ -132,6 +146,22 @@ public class Quotation {
 
     public void setTotalValue(BigDecimal totalValue) {
         this.totalValue = totalValue;
+    }
+
+    public BigDecimal getMaterialTotalValue() {
+        return materialTotalValue;
+    }
+
+    public void setMaterialTotalValue(BigDecimal materialTotalValue) {
+        this.materialTotalValue = materialTotalValue;
+    }
+
+    public BigDecimal getInstallationValue() {
+        return installationValue;
+    }
+
+    public void setInstallationValue(BigDecimal installationValue) {
+        this.installationValue = installationValue;
     }
 
     public BigDecimal getTotalArea() {
@@ -213,4 +243,33 @@ public class Quotation {
     public void setPaymentCondition(String paymentCondition) {
         this.paymentCondition = paymentCondition;
     }
+
+    public void addMarbleshopItem(MarbleshopItem item) {
+        marbleshopItems.add(item);
+        item.setQuotation(this);
+    }
+
+    public void removeMarbleshopItem(MarbleshopItem item) {
+        marbleshopItems.remove(item);
+        item.setQuotation(null);
+    }
+
+    public void addMiscellaneousItem(MiscellaneousItem miscellaneousItem) {
+        miscellaneousItems.add(miscellaneousItem);
+        miscellaneousItem.setQuotation(this);
+    }
+
+    public void removeMiscellaneousItem(MiscellaneousItem miscellaneousItem) {
+        miscellaneousItems.remove(miscellaneousItem);
+        miscellaneousItem.setQuotation(null);
+    }
+
+    public MarbleshopOrder getMarbleshopOrder() {
+        return marbleshopOrder;
+    }
+
+    public void setMarbleshopOrder(MarbleshopOrder marbleshopOrder) {
+        this.marbleshopOrder = marbleshopOrder;
+    }
 }
+

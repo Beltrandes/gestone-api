@@ -10,10 +10,13 @@ import java.util.UUID;
 public record BillRequestDTO(
         String name,
         String description,
+        String supplierName,
         BigDecimal totalValue,
         LocalDateTime dueDate,
         BillCategory category,
         String notes,
+        Integer installments,
+        Boolean isRecurring,
         List<ExpenseRequestDTO> expenses
 ) {
 }

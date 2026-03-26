@@ -28,8 +28,10 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
-        return httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource())).sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).authorizeHttpRequests(authorize ->
-                authorize.requestMatchers(HttpMethod.POST, "/api/v1/auth/login").permitAll()
+        return httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers(HttpMethod.POST, "/api/v1/auth/login")
+                        .permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/register/admin").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/auth/register/employee").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/marbleshop/**").hasRole("ADMIN")
@@ -45,7 +47,9 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.GET, "/api/v1/customer").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/quotation").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/quotation").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/quotation/recalculate/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/quotation/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/quotation/marbleshop-item/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/material").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/material").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/material").hasRole("ADMIN")
@@ -55,7 +59,8 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/miscellaneous-material").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/miscellaneous-material").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/miscellaneous-material").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PATCH, "/api/v1/miscellaneous-material/update/price").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/miscellaneous-material/update/price")
+                        .hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/order").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/order").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/order/pdf/**").hasRole("ADMIN")
@@ -66,12 +71,29 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/expense").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/expense").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/slab").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/v1/production").hasRole("ADMIN").requestMatchers(HttpMethod.GET, "/api/v1/slab").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/slab/movement").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/slab/movement").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/production").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/slab").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/api/v1/production/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/api/v1/production/project-image/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/production").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/auth/register/validate-email").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/visit").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/visit").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/visit/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/visit/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/visit/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/supply").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/supply").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/supply/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/supply/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/supply/movement/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/v1/supply/movement/**").hasRole("ADMIN")
 
-                        .anyRequest().authenticated()).csrf(AbstractHttpConfigurer::disable).addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
+                        .anyRequest().authenticated())
+                .csrf(AbstractHttpConfigurer::disable)
+                .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
     }
 
     @Bean
@@ -87,9 +109,9 @@ public class SecurityConfiguration {
         return source;
     }
 
-
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration)
+            throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 

@@ -24,4 +24,16 @@ public class BillController {
     public ResponseEntity<List<BillResponseDTO>> listAllBills(@PathVariable UUID marbleshopId) {
         return ResponseEntity.ok().body(billService.findAll(marbleshopId).stream().map(BillResponseDTO::new).toList());
     }
+
+    @PutMapping("/{billId}")
+    public ResponseEntity<BillResponseDTO> updateBill(@RequestBody BillRequestDTO billRequestDTO, @PathVariable UUID billId) {
+        var updatedBill = billService.update(billRequestDTO, billId);
+        return ResponseEntity.ok().body(new BillResponseDTO(updatedBill));
+    }
+
+    @DeleteMapping("/{billId}")
+    public ResponseEntity<Void> deleteBill(@PathVariable UUID billId) {
+        billService.delete(billId);
+        return ResponseEntity.noContent().build();
+    }
 }

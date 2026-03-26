@@ -33,6 +33,8 @@ public class MarbleshopOrderService implements IMarbleshopOrderService {
     public MarbleshopOrder save(MarbleshopOrderDTO marbleshopOrderDTO) {
         Quotation quotation = quotationService.findById(marbleshopOrderDTO.quotationId());
         MarbleshopOrder order = new MarbleshopOrder();
+        order.setQuotation(quotation);
+        quotation.setMarbleshopOrder(order);
         List<MarbleshopItem> marbleshopItems = quotation.getMarbleshopItems().stream().map(marbleshopItemDTO -> {
             MarbleshopMaterial marbleshopMaterial = marbleshopItemDTO.getMarbleshopMaterial();
             MarbleshopItem marbleshopItem = new MarbleshopItem();
@@ -43,6 +45,7 @@ public class MarbleshopOrderService implements IMarbleshopOrderService {
             marbleshopItem.setQuantity(marbleshopItemDTO.getQuantity());
             marbleshopItem.setMarbleshopItemType(marbleshopItemDTO.getMarbleshopItemType());
             marbleshopItem.setMarbleshopMaterial(marbleshopMaterial);
+            marbleshopItem.setMaterialPriceSnapshot(marbleshopItemDTO.getMaterialPriceSnapshot());
             List<MarbleshopSubItem> marbleshopSubItems = Optional.ofNullable(marbleshopItemDTO.getMarbleshopSubItems()).orElse(List.of()).stream().map(marbleshopSubItemDTO -> {
                 MarbleshopSubItem marbleshopSubItem = new MarbleshopSubItem();
                 marbleshopSubItem.setName(marbleshopSubItemDTO.getName());
@@ -67,6 +70,7 @@ public class MarbleshopOrderService implements IMarbleshopOrderService {
             miscellaneousItem.setDetails(miscellaneousItemDTO.getDetails());
             miscellaneousItem.setQuantity(miscellaneousItemDTO.getQuantity());
             miscellaneousItem.setMiscellaneousMaterial(miscellaneousMaterial);
+            miscellaneousItem.setMaterialPriceSnapshot(miscellaneousItemDTO.getMaterialPriceSnapshot());
             miscellaneousItem.calculate();
             return miscellaneousItem;
         }).toList();
@@ -76,6 +80,7 @@ public class MarbleshopOrderService implements IMarbleshopOrderService {
         order.setMarbleshop(quotation.getMarbleshop());
         order.setCustomer(quotation.getCustomer());
         order.setWorkAddress(marbleshopOrderDTO.workAddress());
+        order.setInstallationValue(quotation.getInstallationValue());
         order.setNotes(marbleshopOrderDTO.notes());
         order.calculate();
         order.setEstimatedInstallmentDate(LocalDateTime.now().plusDays(quotation.getDeadlineDays()));
@@ -109,5 +114,11 @@ public class MarbleshopOrderService implements IMarbleshopOrderService {
     @Override
     public MarbleshopOrder findById(UUID id) {
         return marbleshopOrderRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("Order not found with id: " + id));
+    }
+
+    public void updateStatus(UUID id, com.gestone.gestone_api.domain.order.MarbleshopOrderStatus status) {
+        MarbleshopOrder order = findById(id);
+        order.setMarbleshopOrderStatus(status);
+        marbleshopOrderRepository.save(order);
     }
 }

@@ -30,7 +30,10 @@ public class ProductionOrder {
     @Enumerated(EnumType.STRING)
     private ProductionPriority productionPriority;
 
-    private String projectUrl;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "production_order_project_urls", joinColumns = @JoinColumn(name = "production_order_id"))
+    @Column(name = "project_url")
+    private List<String> projectUrls = new ArrayList<>();
     private String notes;
     @OneToMany(mappedBy = "productionOrder", cascade = CascadeType.ALL)
     private List<ProductionOrderItem> productionOrderItems = new ArrayList<>();
@@ -96,12 +99,12 @@ public class ProductionOrder {
         this.productionPriority = productionPriority;
     }
 
-    public String getProjectUrl() {
-        return projectUrl;
+    public List<String> getProjectUrls() {
+        return projectUrls;
     }
 
-    public void setProjectUrl(String projectUrl) {
-        this.projectUrl = projectUrl;
+    public void setProjectUrls(List<String> projectUrls) {
+        this.projectUrls = projectUrls;
     }
 
     public String getNotes() {

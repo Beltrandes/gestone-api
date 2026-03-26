@@ -11,6 +11,7 @@ public record BillResponseDTO(
         UUID id,
         String name,
         String description,
+        String supplierName,
         BigDecimal totalValue,
         BigDecimal paidValue,
         LocalDateTime dueDate,
@@ -18,6 +19,10 @@ public record BillResponseDTO(
         BillCategory category,
         BillStatus status,
         String notes,
+        Boolean isRecurring,
+        Integer installmentNumber,
+        Integer totalInstallments,
+        UUID parentBillId,
         LocalDateTime createdAt,
         List<ExpenseResponseDTO> expenses
 ) {
@@ -26,6 +31,7 @@ public record BillResponseDTO(
                 bill.getId(),
                 bill.getName(),
                 bill.getDescription(),
+                bill.getSupplierName(),
                 bill.getTotalValue(),
                 bill.getPaidValue(),
                 bill.getDueDate(),
@@ -33,8 +39,12 @@ public record BillResponseDTO(
                 bill.getCategory(),
                 bill.getStatus(),
                 bill.getNotes(),
+                bill.getIsRecurring(),
+                bill.getInstallmentNumber(),
+                bill.getTotalInstallments(),
+                bill.getParentBillId(),
                 bill.getCreatedAt(),
-                bill.getExpenses().stream().map(ExpenseResponseDTO::new).toList()
+                bill.getExpenses() != null ? bill.getExpenses().stream().map(ExpenseResponseDTO::new).toList() : List.of()
         );
     }
 }

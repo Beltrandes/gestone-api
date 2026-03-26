@@ -15,7 +15,7 @@ public class SlabMovement {
     private UUID id;
     @ManyToOne(fetch = FetchType.LAZY)
     private Slab slab;
-    private BigDecimal areaMoved;
+    private BigDecimal areaMoved = BigDecimal.ZERO;
     @ManyToOne(fetch = FetchType.LAZY)
     private ProductionOrderItem productionOrderItem;
     @Enumerated(EnumType.STRING)

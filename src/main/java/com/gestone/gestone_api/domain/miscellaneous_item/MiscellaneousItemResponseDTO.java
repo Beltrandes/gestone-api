@@ -24,6 +24,10 @@ public class MiscellaneousItemResponseDTO {
         this.miscellaneousMaterial = new MiscellaneousMaterialResponseDTO(miscellaneousItem.getMiscellaneousMaterial());
     }
 
+    public UUID getId() {
+        return id;
+    }
+
     public String getName() {
         return name;
     }

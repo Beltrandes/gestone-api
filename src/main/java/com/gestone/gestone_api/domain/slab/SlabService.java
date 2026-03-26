@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -41,7 +42,57 @@ public class SlabService {
         if (slabId == null) {
             return null;
         }
-        return slabRepository.findById(slabId).orElseThrow(() -> new IllegalArgumentException("Slab not found with id: " + slabId) );
+        return slabRepository.findById(slabId)
+                .filter(Slab::isActive)
+                .orElseThrow(() -> new IllegalArgumentException("Slab not found or inactive with id: " + slabId));
+    }
+
+    public List<Slab> findAll(UUID marbleshopId) {
+        if (marbleshopId == null) {
+            return null;
+        }
+        return slabRepository.findByMarbleshopIdAndActiveTrue(marbleshopId);
+    }
+
+    public Slab update(UUID id, SlabRequestDTO dto) {
+        Slab slab = this.findById(id);
+
+        slab.setMeasureX(dto.measureX());
+        slab.setMeasureY(dto.measureY());
+        slab.setDensityMeasure(dto.densityMeasure());
+        slab.setQuality(dto.quality());
+        
+        if (dto.entryDate() != null) slab.setEntryDate(dto.entryDate());
+        if (dto.notes() != null) slab.setNotes(dto.notes());
+        if (dto.status() != null) slab.setStatus(dto.status());
+        if (dto.materialId() != null) {
+            MarbleshopMaterial material = materialService.findById(dto.materialId());
+            slab.setMaterial(material);
+        }
+
+        slab.calculateArea();
+        this.updateStatusBasedOnArea(slab);
+
+        return slabRepository.save(slab);
+    }
+
+    public void delete(UUID id) {
+        Slab slab = this.findById(id);
+        slab.setActive(false);
+        slabRepository.save(slab);
+    }
+
+    public void updateStatusBasedOnArea(Slab slab) {
+        if (slab.getStatus() == SlabStatus.DISCARDED) {
+            return;
+        }
+        
+        // If area is 0 or extremely close to 0 due to precision issues
+        if (slab.getArea().compareTo(java.math.BigDecimal.valueOf(0.001)) < 0) {
+            slab.setStatus(SlabStatus.IN_USE); 
+        } else if (slab.getStatus() == SlabStatus.IN_USE && slab.getArea().compareTo(java.math.BigDecimal.valueOf(0.001)) >= 0) {
+            slab.setStatus(SlabStatus.IN_STOCK);
+        }
     }
 
 }

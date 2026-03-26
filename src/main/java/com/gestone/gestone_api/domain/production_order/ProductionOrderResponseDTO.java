@@ -19,7 +19,7 @@ public record ProductionOrderResponseDTO(
         ProductionStatus productionStatus,
         ProductionPriority productionPriority,
         String notes,
-        String projectUrl,
+        List<String> projectUrls,
         List<ProductionOrderItemResponseDTO> productionOrderItems
 
 ) {
@@ -36,7 +36,7 @@ public record ProductionOrderResponseDTO(
                 productionOrder.getProductionStatus(),
                 productionOrder.getProductionPriority(),
                 productionOrder.getNotes(),
-                productionOrder.getProjectUrl(),
+                productionOrder.getProjectUrls(),
                 productionOrder.getProductionOrderItems().stream().map(ProductionOrderItemResponseDTO::new).toList()
         );
     }

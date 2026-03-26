@@ -21,6 +21,7 @@ public class Bill {
     private UUID id;
     private String name;
     private String description;
+    private String supplierName;
     @Column(precision = 10, scale = 2)
     private BigDecimal totalValue = BigDecimal.ZERO;
 
@@ -34,6 +35,10 @@ public class Bill {
     @Enumerated(EnumType.STRING)
     private BillCategory category;
     private String notes;
+    private Boolean isRecurring = false;
+    private Integer installmentNumber;
+    private Integer totalInstallments;
+    private UUID parentBillId;
     @CreationTimestamp
     private LocalDateTime createdAt;
     @UpdateTimestamp
@@ -190,5 +195,45 @@ public class Bill {
 
     public void setTotalPaid() {
         this.paidValue = getTotalPaid();
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
+    }
+
+    public Boolean getIsRecurring() {
+        return isRecurring;
+    }
+
+    public void setIsRecurring(Boolean recurring) {
+        isRecurring = recurring;
+    }
+
+    public Integer getInstallmentNumber() {
+        return installmentNumber;
+    }
+
+    public void setInstallmentNumber(Integer installmentNumber) {
+        this.installmentNumber = installmentNumber;
+    }
+
+    public Integer getTotalInstallments() {
+        return totalInstallments;
+    }
+
+    public void setTotalInstallments(Integer totalInstallments) {
+        this.totalInstallments = totalInstallments;
+    }
+
+    public UUID getParentBillId() {
+        return parentBillId;
+    }
+
+    public void setParentBillId(UUID parentBillId) {
+        this.parentBillId = parentBillId;
     }
 }

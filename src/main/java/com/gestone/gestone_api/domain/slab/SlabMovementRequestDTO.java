@@ -5,9 +5,9 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public record SlabMovementRequestDTO(
-        UUID productionOrderItemId,
         UUID slabId,
-        BigDecimal areaMoved,
+        UUID productionOrderItemId, // Optional
+        BigDecimal areaMoved,       // Optional (used for manual movements)
         SlabMovementType movementType,
         String notes
 ) {

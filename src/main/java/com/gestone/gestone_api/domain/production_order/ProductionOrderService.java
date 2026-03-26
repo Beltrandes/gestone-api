@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 public class ProductionOrderService {
     @Autowired
     private ProductionOrderRepository productionOrderRepository;
+    @Autowired
+    private ProductionOrderItemRepository productionOrderItemRepository;
     @Autowired
     private MarbleshopOrderService marbleshopOrderService;
 
@@ -39,6 +42,40 @@ public class ProductionOrderService {
         productionOrder.setNotes(productionOrderRequestDTO.notes());
         productionOrder.setOrder(order);
         productionOrder.setMarbleshop(order.getMarbleshop());
+        productionOrder.setRealStartDate(LocalDate.now());
+
+        marbleshopOrderService.updateStatus(order.getId(), com.gestone.gestone_api.domain.order.MarbleshopOrderStatus.PRODUCING);
+
+        return productionOrderRepository.save(productionOrder);
+    }
+
+    public ProductionOrder updateItemStatus(UUID itemId, ProductionOrderItemStatus newStatus) {
+        ProductionOrderItem item = productionOrderItemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("Production Order Item not found"));
+        item.setStatus(newStatus);
+        productionOrderItemRepository.save(item);
+
+        ProductionOrder order = item.getProductionOrder();
+        
+        boolean allProduced = order.getProductionOrderItems().stream()
+                .allMatch(i -> i.getStatus() == ProductionOrderItemStatus.PRODUCED);
+
+        if (allProduced && order.getProductionStatus() != ProductionStatus.FINISHED) {
+            updateStatus(order.getId(), ProductionStatus.FINISHED);
+        }
+
+        return order;
+    }
+
+    public ProductionOrder updateStatus(UUID id, ProductionStatus newStatus) {
+        ProductionOrder productionOrder = findById(id);
+        productionOrder.setProductionStatus(newStatus);
+        
+        if (newStatus == ProductionStatus.FINISHED) {
+            productionOrder.setRealEndDate(LocalDate.now());
+            marbleshopOrderService.updateStatus(productionOrder.getOrder().getId(), com.gestone.gestone_api.domain.order.MarbleshopOrderStatus.PRODUCED);
+        }
+        
         return productionOrderRepository.save(productionOrder);
     }
 
@@ -50,7 +87,7 @@ public class ProductionOrderService {
         Files.createDirectories(filePath.getParent());
         Files.write(filePath, file.getBytes());
 
-        productionOrder.setProjectUrl(filePath.toString());
+        productionOrder.getProjectUrls().add(fileName);
         productionOrderRepository.save(productionOrder);
 
     }
